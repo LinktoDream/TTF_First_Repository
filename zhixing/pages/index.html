@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/general.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/header.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/footer.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/index.css"/>
+		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+		<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+		<script src="http://how2j.cn/study/jquery.min.js"></script>
+		<title>致行——首页</title>
+	</head>
+	<body>
+		<div id="app">
+			<div id="header">
+			<!-- 登陆组件 -->
+				<login-component></login-component>
+			</div>	
+			<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
+			<div class="main animated fadeInLeft">
+				<!-- 广告栏 -->
+				<div class="banner">
+					<h1>致行——<br>&nbsp;&nbsp;&nbsp;&nbsp;大学生自己的外包平台</h1>
+					<div class="searchbar">
+						<input type="text" class="inputvalue" placeholder="搜索项目/用户" spellcheck="true" v-model="inputvalue" @keypress="search(event)"/>
+						<a href="javascript:void(0)" class="searchbutton" @click="search_btn"><img src="../img/searchbutton.png" /></a>
+					</div>
+				</div>
+				<!-- 导航栏 -->
+				<div class="nav">
+					<ul>
+						<li :style="style_nav1" @click="nav1">首页推荐</li>
+						<li :style="style_nav2" @click="nav2">最新发布</li>
+						<li :style="style_nav3" @click="nav3">上升最快</li>
+					</ul>
+				</div>
+				<!-- 内容 -->
+				<div class="content">
+					<div class="project">
+						<img src="../img/loading1.gif" class="loadingGIF" v-show="showLoading" style="position: absolute;left: 50%;top: 37%;"/>
+						<a :href="'item.html?id='+item.id" :class="item_style[index]" v-for="(item,index) in items" v-if="item.state == 1" @mouseenter="item_mouseenter(index)" @mouseleave="item_mouseleave(index)">
+							<div class="item-header">
+								<p class="twoLineText item-title">{{item.title}}</p>
+								<span class="item-footerFont item-price">报酬：<b>￥{{item.price}}</b></span>
+							</div>
+							<hr />
+							<div class="item-info">
+								<!-- <img :src="item.avatar" :title="item.author" width="30px" height="30px" style="border-radius: 15px;position: absolute;left: 15px;" alt="用户头像"/> -->
+								<span class="siggleText item-footerFont" :title="item.author">发布者：{{item.author}}</span>
+								<span class="item-footerFont">浏览量：{{item.viewCount}}</span>
+								<span class="item-footerFont">发布时间：{{item.createTime}}</span>
+							</div>
+						</a>
+					</div>
+				</div>
+				<!-- 次要部分 -->
+				<div class="minor">
+					<!-- 昨日订单 -->
+					<div class="yesterday">
+						<h1 style="font-weight: 200;text-align: center;">
+							<span v-for="i in 10">：</span>
+							最新在致行成交的订单
+							<span v-for="i in 10">：</span>
+						</h1>
+						<div class="indent">
+							<div class="order" v-for="order in orders">
+								<img src="../img/exchange.png" />
+								<h2>{{order.itemTitle}}</h2>
+								<span class="order-text">发布人：{{order.author}}</span>
+								<span class="order-text">接受人：{{order.user}}</span>
+								<span class="order-text">交易金额：<b>￥<span style="font-size: 36px;font-weight: 400;">{{order.price}}</span><span style="font-size: 12px;color: #8A8C9F;">/MO</span></b></span>
+								<span class="item-footerFont order-time">创建时间：{{order.createTime}}</span>
+							</div>
+						</div>
+					</div>
+					<!-- 滑动栏 -->
+					<div class="slider" @mouseenter="slider_mouseenter" @mouseleave="slider_mouseleave">
+						<img v-for="(url,index) in img_url" v-show="index == slider_index" :style="style_slider" :src="url" width="1275px" height="320px" >
+						<a href="javascript:void(0)" class="prev change" @click="prev" v-show="prev_next_show"><img src="../img/prev.png" /></a>
+						<a href="javascript:void(0)" class="next change" @click="next" v-show="prev_next_show"><img src="../img/next.png" /></a>
+					</div>
+				</div>
+				<!-- 底部 -->
+				<footer class="footer">
+					<div class="footer-nav">
+						<ul>
+							<li><a href="#"><img class="photoMiddle" src="../img/phone.png" width="16px" height="28px">&nbsp;&nbsp;移动版</a></li>
+							<li><a href="#">关于我们</a></li>
+							<li><a href="#">加入站酷</a></li>
+							<li><a href="#">用户协议</a></li>
+							<li><a href="#">企业服务</a></li>
+							<li><a href="#">帮助中心</a></li>
+							<li><a href="#">联系我们</a></li>
+							<li><a href="#">中文</a></li>
+							<li><a href="#">English</a></li>
+							<a href="#" class="weixin"><img class="photoMiddle" src="../img/weixin.png" width="28px" height="24px"></a>
+							<a href="#" class="weibo"><img class="photoMiddle" src="../img/weibo.png" width="28px" height="24px"></a>
+						</ul>
+					</div>
+					<div class="legal-info">
+						<ul>
+							<li><a href="">京ICP备案号00000000</a></li>|
+							<li><a href="">京ICP证书编号1234</a></li>|
+							<li><a href="">京公网安备案号0123456789</a></li>|
+							<li><a href="">网络文化经营许可证xxxxxxxxxx</a></li>|
+							<li><a href="">广播电视节目经营许可证xxxxxxxxx</a></li>|
+							<li><a href="">网上有害信息举报专区</a></li>|
+							<li><a href="">不良信息举报电话：010-56538658</a></li>|
+							<li><a href="">举报xxxxxxxxxxxx</a></li>|
+							<li><a href="">联系电话：110-120-119-12306</a></li>
+						</ul>
+					</div>
+				</footer>
+			</div>
+		</div>
+		<script src="../js/vue-js/index-vue.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

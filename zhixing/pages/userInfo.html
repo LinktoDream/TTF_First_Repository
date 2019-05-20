@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="http://how2j.cn/study/jquery.min.js"></script>
+    <script src="http://how2j.cn/study/vue.min.js"></script>
+	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/general.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/header.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/center.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/source/cropper.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/source/ImgCropping.css"/>
+</head>
+<body>
+	<div id="app">
+		<div id="header">
+			<!-- 登陆组件 -->
+			<login-component></login-component>
+		</div>
+		<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
+		<hr>
+		<div class="main animated fadeInLeftBig">
+			<div class="main-nav">
+				<ul>
+					<li class="current-nav" onclick="Show_userInfo()">他的资料</li>
+					<li onclick="Show_myBlogs()">他的动态</li>
+				</ul>
+			</div>
+			<div class="main-content">
+				<div id="userInfo">
+					<h3>个人资料</h3><hr />
+					<img src="../img/loading1.gif" class="loadingGIF" id="userInfoLoading"/>
+					<div class="user-info">
+						<div class="img_avatar" id="replaceImg">
+							<img width="100px" height="100px" v-bind:src="user.avatar"/>
+						</div>
+						<div class="right_c">
+							<ul>
+								<li>账号：<span class="username">{{user.username}}</span></li>
+								<hr />
+								<li>昵称：<span>{{user.nickname}}</span></li>
+								<li>性别：<span v-if="user.gender">男</span><span v-else>女</span></li>
+								<li>学校：<span>{{user.college}}</span></li>
+								<li>专业：<span>{{user.major}}</span></li>
+								<li>手机：<span>{{user.phone}}</span></li>
+								<li>邮箱：<span>{{user.email}}</span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div id="myBlogs">
+					<h3>我的动态</h3><hr />
+					<img src="../img/loading1.gif" class="loadingGIF" id="myBlogsLoading"/>
+					<div v-if="blogs.length > 0">
+						<div class="blog-block" v-for="(blog,i) in blogs">
+							<div class="blog-author">
+								<div class="author-avatar">
+									<img :src="blog.avatar" width="80px" />
+								</div>
+								<span>{{blog.author}}</span>
+							</div>
+							<div class="blog-content">
+								<p v-html="blog.content"></p>
+								<div v-for="picture in blog.pictures" class="blog-pictures">
+									<img width="300px" height="150px" v-bind:src="picture.url"/>
+								</div>
+								<div class="blog-info">
+									<span class="time-font">[{{blog.publishTime}}]</span>
+									<a v-bind:href="'blog.html?id='+blog.id" class="minor-font">评论({{blog.commentCount}})</a>
+									<a href="javascript:void(0)" @click="doFavour(blog.id,i)" class="minor-font">赞({{blog.favourCount}})</a>
+								</div>
+							</div>
+						</div>
+					</div> 
+					<div v-else class="noInfo-font">
+						他还没有发布动态&nbsp;&nbsp;&nbsp;
+					</div>
+				</div>
+				<button id="choose" class="btn btn-primary" style="float: right;" onclick="choose()">选择他</button>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="../js/userInfo.js"></script>
+</html>

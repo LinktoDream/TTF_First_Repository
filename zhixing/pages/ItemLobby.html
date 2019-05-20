@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>致行——项目大厅</title>
+	<script src="http://how2j.cn/study/jquery.min.js"></script>
+	<script src="http://how2j.cn/study/vue.min.js"></script>
+	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/general.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/header.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/ItemLobby.css"/>
+</head>
+<body>
+	<div id="app">
+		<div id="header">
+			<login-component></login-component>
+		</div>
+		<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
+		<hr >
+		<div class="main">
+			<div id="itemList">
+				<span class="main-nav currMain-nav" @click="change_mainNav">正在竞选</span>
+				<span class="main-nav currMain-nav" @click="change_mainNav">已经完成</span>
+				<select class="typeSelect" v-model="typeText" @change="change_Type">
+					<option value ="all">全部</option>
+					<option :value="type.id" v-for="type in typeArray">{{type.name}}</option>
+				</select>
+				<img src="../img/loading1.gif" class="loadingGIF">
+				<div class="itemContent">
+					<div v-if="itemCount > 0">
+						<a v-for="item in items" v-if="item.state == state" :href="'item.html?id='+item.id" title="点击查看项目详情" class="item-block">
+							<div class="published-item">
+								<div class="item-author">
+									<div class="author-avatar">
+										<img :src="item.avatar" width="80px" />
+									</div>
+									<span>{{item.author}}</span>
+								</div>
+								<div class="item-info">
+									<div class="item-header">
+										<span class="item-title">{{item.title}}</span>
+										<span class="item-price">报酬:{{item.price}}元</span>
+									</div>
+									<div class="item-description" v-html="item.description">
+									</div>
+									<span class="time-font">浏览量：{{item.viewCount}}</span>
+									<span class="time-font">发布时间：[{{item.createTime}}]</span>
+								</div>
+							</div>
+						</a>
+						<ul class="pagination">
+							<li class="btn btn-primary" @click="prevPage">&laquo;</li>
+							<li class="btn btn-primary" :class="Page_class[i+1]" v-for="(currP,i) in pageAllNum" @click="getItemList(pageSize,currP)">{{currP}}</li>
+							<li class="btn btn-primary" @click="nextPage">&raquo;</li>
+						</ul>
+					</div>
+					<div v-else style="text-align: center;">
+						<h4>暂无项目……</h4>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	$(function(){
+		getItemCount();
+		$(".main-nav").eq(1).toggleClass("currMain-nav")
+	})
+	function getItemCount(){
+		$(".loadingGIF").show()
+		$(".itemContent").hide()
+		// 先获取项目总数
+		$.ajax({
+			url:"http://114.116.77.118:8888/item/getItemCount",
+			type:"get",
+			datatype:"json",
+			xhrFields: {
+				withCredentials: true // 这里设置了withCredentials
+			},
+			success:function (result) {
+				$(".itemContent").show()
+				$(".loadingGIF").hide()
+				new Vue({
+					el: "#itemList",
+					data: {
+						allitemCount:result.data,
+						itemCount: result.data,
+						items: [],
+						pageSize: 20,
+						pageAllNum:1,
+						currPage:1,
+						Page_class:[],
+						currPage_class:'active',
+						state:1,
+						typeText:'all',//当前分类
+						typeArray:[],//分类数组
+						
+					},
+					created() {
+						// 获取分类
+						this.getTypeArray()
+						// 获取第一页项目列表
+						this.getItemList(this.pageSize,1)
+						// 计算总页数
+						this.pageAllNum = Math.ceil(this.itemCount/this.pageSize)
+						// 设置数组长度 = pageAllNum+1(数组使用从1起始)
+						this.Page_class.length = this.pageAllNum + 1
+					},
+					methods:{
+						prevPage:function(){
+							if(this.currPage > 1){
+								this.currPage--
+								if(this.typeText == 'all'){
+									this.getItemList(this.pageSize,this.currPage)
+								}else{
+									this.getTypeItemList(this.pageSize,this.currPage)
+								}
+								this.change_currPageClass(this.currPage)
+							}
+						},
+						nextPage:function(){
+							if(this.currPage < this.pageAllNum){
+								this.currPage++
+								if(this.typeText == 'all'){
+									this.getItemList(this.pageSize,this.currPage)
+								}else{
+									this.getTypeItemList(this.pageSize,this.currPage)
+								}
+								this.change_currPageClass(this.currPage)
+							}
+						},
+						getItemList:function(pSize,currP) {
+							var _this = this
+							$(".loadingGIF").show()
+							$(".itemContent").hide()
+							axios({
+								method:"get",
+								url:"http://114.116.77.118:8888/item/listByTime",
+								datatype:"json",
+								params:{
+									pageSize: pSize,
+									currPage: currP
+								},
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								$(".itemContent").show()
+								$(".loadingGIF").hide()
+								if(res.data.status == 1){
+									_this.items = res.data.data
+									_this.currPage = currP
+									_this.change_currPageClass(currP)
+									for(var i = 0;i < _this.items.length;i++){
+										var reg = new RegExp("\n|\r\n", "g");//g,表示全部替换
+										_this.items[i].description = _this.items[i].description.replace(reg, "<br/>");
+										_this.items[i].description = _this.items[i].description.replace(/\s/g, "&nbsp;");
+									}
+								}else{
+									alert(res.data.message)
+								}
+							}).catch(function(error){
+								alert(error)
+							})
+						},
+						// 改变当前页码样式
+						change_currPageClass:function(currP){
+							this.Page_class[currP] = this.currPage_class
+							for(var i = 1;i < this.Page_class.length;i++){
+								if(i != currP){
+									this.Page_class[i] = null
+								}
+							}
+						},
+						// main-nav切换为正在竞选
+						change_mainNav:function(){
+							$(".main-nav").eq(0).toggleClass("currMain-nav")
+							$(".main-nav").eq(1).toggleClass("currMain-nav")
+							if(this.state == 1){
+								this.state = 2
+							}else{
+								this.state = 1
+							}
+						},
+						// 改变分类事件
+						change_Type:function(){
+							var _this = this
+							$(".loadingGIF").show()
+							$(".itemContent").hide()
+							// 先获取总数
+							if(this.typeText == 'all'){
+								this.itemCount = this.allitemCount
+								this.getItemList(this.pageSize,1)
+							}else{
+								axios({
+									method:"get",
+									url:"http://114.116.77.118:8888/item/getItemCountByCid",
+									datatype:"json",
+									params:{
+										cid: _this.typeText,
+									},
+									crossDomain: true,
+									cache: false,
+									withCredentials: true, // 允许携带cookie
+								}).then(function(res){
+									$(".itemContent").show()
+									$(".loadingGIF").hide()
+									if(res.data.status == 1){
+										_this.itemCount = res.data.data
+										// 获取分类项目列表
+										_this.getTypeItemList(_this.pageSize,1)
+									}else{
+										alert(res.data.message)
+									}
+								}).catch(function(error){
+									alert(error)
+								})
+							}
+						},
+						// 获取分类数组
+						getTypeArray:function(){
+							var _this = this
+							axios({
+								method:"get",
+								url:"http://114.116.77.118:8888/item/getCataList",
+								datatype:"json",
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								if(res.data.status == 1){
+									_this.typeArray = res.data.data
+								}else{
+									alert(res.data.message)
+								}
+							}).catch(function(error){
+								alert(error)
+							})
+						},
+						// 获取分类项目列表
+						getTypeItemList:function(pSize,currP){
+							var _this = this
+							$(".loadingGIF").show()
+							$(".itemContent").hide()
+							axios({
+								method:"get",
+								url:"http://114.116.77.118:8888/item/listByCid",
+								datatype:"json",
+								params:{
+									cid: _this.typeText,
+									pageSize: pSize,
+									currPage: currP
+								},
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								$(".itemContent").show()
+								$(".loadingGIF").hide()
+								if(res.data.status == 1){
+									_this.items = res.data.data
+									_this.currPage = currP
+									_this.change_currPageClass(currP)
+									for(var i = 0;i < _this.items.length;i++){
+										var reg = new RegExp("\n|\r\n", "g");//g,表示全部替换
+										_this.items[i].description = _this.items[i].description.replace(reg, "<br/>");
+										_this.items[i].description = _this.items[i].description.replace(/\s/g, "&nbsp;");
+									}
+								}else{
+									alert(res.data.message)
+								}
+							}).catch(function(error){
+								alert(error)
+							})
+						}
+					}
+				})
+			}
+		})
+	}
+</script>
+</html>

@@ -1,0 +1,134 @@
+a{
+	color: #333333;
+	text-decoration: none;
+}
+a:hover{
+	color: #333333;
+	text-decoration: none;
+}
+.search_header{
+	width: 100%;
+    height: 200px;
+	
+	padding-top: 70px;
+}
+.searchbar{
+	height: 55px;
+	width: 500px;
+	background-color: #FFFFFF;
+	border:3px solid #8d847d;
+	
+	margin: 0 auto;
+	
+	border-radius: 27.5px;
+}
+/* 搜索文本框 */
+.inputvalue{
+	background-color: #FFFFFF;
+	width: 400px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 20px;
+	margin-top: 3px;
+	border: none;
+	outline: none;
+	
+	font-size: 26px;
+	color: #8d847d;
+}
+.searchbutton{
+	display: inline-block;
+	vertical-align: middle;
+	float: right;
+	margin-top: 5px;
+	margin-right: 10px;
+}
+.search_content{
+	width: 700px;
+	margin: 0 auto;
+}
+.published-item{
+	width: 100%;
+	padding: 20px 20px 20px 20px;
+	box-shadow: 0px 5px 5px #DDDDDD;
+	border: 1px solid #DDDDDD;
+	display: flex;
+	border-radius: 10px;
+}
+.item-author{
+	width: 80px;
+	margin-right: 20px;
+	padding-top: 15px;
+}
+.item-author span{
+	display: block;
+	width:100%;
+	/* 文字换行：间断英文单词*/
+	word-break:break-all;
+	text-align: center;
+	font-weight: 600;
+}
+.author-avatar{
+	width: 80px;
+	height: 80px;
+	border-radius: 40px;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+.item-info{
+	width: 560px;
+}
+.item-header{
+	display: flex;
+	padding-bottom: 10px;
+}
+.item-title{
+	/* 文本溢出省略标记 */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+	
+	width: 70%;
+	display: inline-block;
+    font-size: 20px;
+	font-weight: 600;
+}
+.item-price{
+	width: 30%;
+	display: inline-block;
+	font-size: 16px;
+	text-align: right;
+}
+.item-description{
+	/* 文字换行：不间断英文单词 */
+	word-wrap: break-word;
+	font-size: 18px;
+	padding-bottom: 20px;
+}
+.time-font{
+	font-size: 16px;
+	color: #94998a;
+	margin-right: 15px;
+	float: right;
+}
+.itemList{
+	margin-bottom: 50px;
+}
+.info-title{
+	margin-bottom: 20px;
+	font-size: 20px;
+}
+.text-info span{
+	display: block;
+	color: #333333;
+	font-size: 18px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+.user-info{
+	width: 35%;
+	margin-left: 20px;
+}
+.user-info b{
+	font-weight: 350;
+}

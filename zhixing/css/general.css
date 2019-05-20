@@ -1,0 +1,26 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+a{
+	text-decoration: none;
+	color: #FFFFFF;
+}
+li{
+	list-style-type: none;
+}
+#app{
+	width: 1342px;
+	margin: 0 auto;
+	margin-bottom: 100px;
+}
+.photoMiddle{
+	vertical-align: middle;
+}
+.hidden {
+	display: none;
+}
+.loadingGIF{
+	display: block;
+	margin: 0 auto;
+}

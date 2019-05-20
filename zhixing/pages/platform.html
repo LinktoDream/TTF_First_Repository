@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>致行——项目发布</title>
+    <script src="http://how2j.cn/study/jquery.min.js"></script>
+    <script src="http://how2j.cn/study/vue.min.js"></script>
+	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/general.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/header.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/platform.css"/>
+</head>
+<body>
+	<div id="app">
+		<div id="header">
+			<!-- 登陆组件 -->
+			<login-component></login-component>
+		</div>
+		<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
+		<hr>
+		<div class="main animated fadeInLeftBig">
+			<div class="left-part">
+				<div id="publish">
+				    <form id="publishForm" enctype="multipart/form-data">
+						<div class="field">
+							<label>标题</label>
+							<input type="text" id="title" name="title" maxlength="20" placeholder="请输入项目标题,1~20个字符">
+						</div>
+						<div class="field">
+							<label>描述</label>
+							<textarea id="description" name="description" maxlength="2000" placeholder="请简要描述您的项目,1~2000个字符"></textarea>
+						</div>
+						<div class="field">
+							<label>报酬(单位：元)</label>
+							<input type="number" id="price" name="price" placeholder="请填写项目报酬">
+						</div>
+						<div class="field">
+							<label>选择分类</label>
+							<select name="cid">
+							    <option value="1">分类1</option>
+							    <option value="2">分类2</option>
+							    <option value="3">分类3</option>
+							</select>
+						</div>
+						<button class="publish-btn" id="submit" type="button" onclick="publish()">发布</button>
+				    </form>
+					<hr>
+				</div>
+			</div>
+			<div class="right-part">
+				<div id="userInfo">
+					<div v-if="status == 1">
+						<a href="center.html"><img width="80px" height="80px" v-bind:src="user.avatar"/></a><br>
+						<hr />
+						账号：{{user.username}}<br>
+						昵称：{{user.nickname}}<br>
+					</div>
+					<div v-else style="text-align: center;">
+						<b>您还未登录，请先登录!</b>
+					</div> 
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+    $(function () {
+        getLoginUser();
+        // // 检测输入是否为金额
+        // $("#price").keyup(function () {
+        //     var reg = $(this).val().match(/\d+\.?\d{0,2}/);
+        //     var txt = '';
+        //     if (reg != null) {
+        //         txt = reg[0];
+        //     }
+        //     $(this).val(txt);
+        // }).change(function () {
+        //     $(this).keypress();
+        //     var v = $(this).val();
+        //     if (/\.$/.test(v))
+        //     {
+        //         $(this).val(v.substr(0, v.length - 1));
+        //     }
+        // });
+    })
+    function getLoginUser() {
+        $.ajax({
+            url:"http://114.116.77.118:8888/user/getLoginUser",
+            type:"get",
+            datatype:"json",
+			xhrFields: {
+				withCredentials: true // 这里设置了withCredentials
+			},
+            success:function (result) {
+                new Vue({
+                    el: "#userInfo",
+                    data: {
+                        status: result.status,
+                        user: result.data
+                    }
+                })
+            }
+        })
+    }
+    function publish() {
+        $.ajax({
+            url: "http://114.116.77.118:8888/item/add",
+            type: "post",
+            data: $("#publishForm").serialize(),
+            dataType:"json",
+			xhrFields: {
+				withCredentials: true // 这里设置了withCredentials
+			},
+            success : function (result) {
+                if (result.status == 1) {
+                    window.location.href = "center.html?nav=3"
+                } else {
+                    alert(result.message);
+                }
+            },
+            error : function () {
+                alert("发布失败");
+            }
+        });
+    }
+</script>
+</html>

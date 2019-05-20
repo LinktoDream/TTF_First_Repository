@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <script src="http://how2j.cn/study/jquery.min.js"></script>
+    <script src="http://how2j.cn/study/vue.min.js"></script>
+	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/general.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/header.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/item.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/footer.css"/>
+    <meta charset="UTF-8">
+    <title>致行——项目详情</title>
+</head>
+<body>
+	<div id="app">
+		<div id="header">
+			<!-- 登陆组件 -->
+			<login-component></login-component>
+		</div>
+		<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
+		<hr />
+		<div id="itemDetails" class="animated fadeInLeftBig">
+			<div class="left-part">
+				<div class="item-img">
+					<img src="../img/intro.jpg" width="460px" height="300px"/>
+				</div>
+				<div class="join-list">
+					<h4>报名列表</h4>
+					<div class="list-item">
+						<ul>
+							<li v-for="candidate in item.candidates" @click="candidate_Info(candidate.uid,candidate.iid)">
+								<img v-if="candidate.state == 1" src="../img/11573cd595c3aac.jpg!r650.jpg" style="margin-top: 10px;margin-left: 10px;" />
+								<div class="candidate-info">
+									<img :src="candidate.avatar" />
+									<span class="user-name">{{candidate.user}}</span>
+									<span class="join-time">[{{candidate.createTime}}]</span>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="item-info">
+				<div class="infomation">
+					<h3><span v-show="item.state == 2" style="color: #28A745;font-weight: 500;">[已完成]</span>{{item.title}}</h3>
+					<p>发布人：<img :src="item.avatar" width="30px" style="border-radius: 15px;">&nbsp;&nbsp;{{item.author}}</p>
+					<p>发布时间：{{item.createTime}}</p>
+					<p>分类:{{item.catalog}}</p>
+					<p>报酬：{{item.price}}元</p>
+					<button class="btn btn-outline-dark" v-bind:onclick="'join('+item.id+')'">我要报名</button>
+				</div>
+				<div class="item-detail">
+					<h4>详细描述</h4>
+					<div class="details" v-html="item.description">
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer class="footer">
+			<div class="footer-nav">
+				<ul>
+					<li><a href="#"><img class="photoMiddle" src="../img/phone.png" width="16px" height="28px">&nbsp;&nbsp;移动版</a></li>
+					<li><a href="#">关于我们</a></li>
+					<li><a href="#">加入站酷</a></li>
+					<li><a href="#">用户协议</a></li>
+					<li><a href="#">企业服务</a></li>
+					<li><a href="#">帮助中心</a></li>
+					<li><a href="#">联系我们</a></li>
+					<li><a href="#">中文</a></li>
+					<li><a href="#">English</a></li>
+					<a href="#" class="weixin"><img class="photoMiddle" src="../img/weixin.png" width="28px" height="24px"></a>
+					<a href="#" class="weibo"><img class="photoMiddle" src="../img/weibo.png" width="28px" height="24px"></a>
+				</ul>
+			</div>
+			<div class="legal-info">
+				<ul>
+					<li><a href="">京ICP备案号00000000</a></li>|
+					<li><a href="">京ICP证书编号1234</a></li>|
+					<li><a href="">京公网安备案号0123456789</a></li>|
+					<li><a href="">网络文化经营许可证xxxxxxxxxx</a></li>|
+					<li><a href="">广播电视节目经营许可证xxxxxxxxx</a></li>|
+					<li><a href="">网上有害信息举报专区</a></li>|
+					<li><a href="">不良信息举报电话：010-56538658</a></li>|
+					<li><a href="">举报xxxxxxxxxxxx</a></li>|
+					<li><a href="">联系电话：110-120-119-12306</a></li>
+				</ul>
+			</div>
+		</footer>
+	</div>
+</body>
+<script>
+    $(function () {
+        var id = getQueryString("id");
+        getItem(id);
+    })
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+    function getItem(id) {
+        var data = {"id": id};
+        $.ajax({
+            url:"http://114.116.77.118:8888/item/getById",
+            type:"get",
+            data:data,
+            datatype:"jsonp",
+			xhrFields: {
+				withCredentials: true // 这里设置了withCredentials
+			},
+            success:function (result) {
+                new Vue({
+                    el: "#itemDetails",
+                    data: {
+                        item: result.data
+                    },
+					created() {
+						var reg = new RegExp("\n|\r\n", "g");//g,表示全部替换
+						this.item.description = this.item.description.replace(reg, "<br/>");
+						this.item.description = this.item.description.replace(/\s/g, "&nbsp;");
+						var data = {"iid":this.item.id}
+						var _this = this
+						axios({
+							method:"get",
+							url:"http://114.116.77.118:8888/candidate/list",
+							dataType:"json",
+							params:data,
+							crossDomain: true,
+							cache: false,
+							withCredentials: true, // 允许携带cookie
+						}).then(function(res){
+							if(res.data.status == 1){
+								_this.item.candidates = res.data.data
+								for(var i = 0;i < _this.item.candidates.length;i++){
+									if(_this.item.candidates[i].state == 1){
+										_this.selected_Candidate(i)
+									}
+								}
+							}else{
+								alert(res.data.message)
+							}
+						}).catch(function(error){
+							alert(error)
+						})
+					},
+					methods:{
+						candidate_Info:function(uid,iid){
+							window.location.href="userInfo.html?uid="+uid
+						},
+						selected_Candidate:function(i){
+							$(".list-item li").eq(i).attr("class","selectedCandidate")
+						}
+					}
+                })
+            },
+            error:function () {
+                alert("获取项目失败！");
+            }
+        })
+    }
+    function join(iid) {
+        var data = {"iid": iid};
+        $.ajax({
+            url: "http://114.116.77.118:8888/candidate/join",
+            type: "post",
+            data: data,
+            dataType:"json",
+			xhrFields: {
+				withCredentials: true // 这里设置了withCredentials
+			},
+            success : function (result) {
+                if (result.status == 1) {
+                    window.location.reload();
+                } else {
+                    alert(result.message);
+                }
+            },
+            error : function () {
+                alert("报名失败。");
+            }
+        });
+    }
+</script>
+</html>

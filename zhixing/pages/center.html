@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>致行——个人中心</title>
+    <script src="http://how2j.cn/study/jquery.min.js"></script>
+    <script src="http://how2j.cn/study/vue.min.js"></script>
+	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/general.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/header.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/center.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/source/cropper.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/source/ImgCropping.css"/>
+</head>
+<body>
+	<div id="app">
+		<div id="header">
+			<!-- 登陆组件 -->
+			<login-component></login-component>
+		</div>
+		<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
+		<hr>
+		<div class="main animated fadeInLeftBig">
+			<div class="main-nav">
+				<ul>
+					<li class="current-nav" onclick="Show_userInfo()">个人资料</li>
+					<li onclick="Show_myBlogs()">我的动态</li>
+					<li onclick="Show_myItems()">我的项目</li>
+					<li onclick="Show_myOrders()">我的订单</li>
+				</ul>
+			</div>
+			<div class="main-content">
+				<div id="userInfo">
+					<h3>个人资料</h3><hr />
+					<img src="../img/loading1.gif" class="loadingGIF" id="userInfoLoading"/>
+					<div v-if="status == 1">
+						<div class="user-info">
+							<div class="img_avatar" id="replaceImg" @click="cutImg_toggle">
+								<img width="100px" height="100px" v-bind:src="user.avatar"/>
+								<p>修改头像</p>
+							</div>
+							<div class="right_c">
+								<ul>
+									<li>账号：<span class="username">{{user.username}}</span></li>
+									<hr />
+									<li>昵称：<input type="text" v-model="user.nickname" /></li>
+									<li>性别：
+										<input type="radio" name="gender" id="male" value="male" v-model="radio_value"/><label for="male">男</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="radio" name="gender" id="famale" value="famale" v-model="radio_value"/><label for="famale">女</label></li>
+									<li>学校：<input type="text" v-model="user.college" /></li>
+									<li>专业：<input type="text" v-model="user.major" /></li>
+									<li>手机：<input type="text" v-model="user.phone" /></li>
+									<li>邮箱：<input type="text" v-model="user.email" /></li>
+								</ul>
+								<span class="mod" style="float: right;" @click="save_userInfo">保存资料</span>
+								<span class="mod" @click="Start_updatePW">修改密码</span>
+								<div class="updatePW" v-show="IsUpdatePW_Show">
+									<input class="form-control" type="password" name="oldPW" id="oldPW" value="" placeholder="请输入原密码" v-model="oldPW"/>
+									<span class="warning-info" v-show="!IsPWLegal">密码长度不小于8位</span>
+									<input :class="PW_style" class="form-control" type="password" name="newPW" id="newPW" value="" placeholder="请输入8-16位新密码" v-model="newPW" maxlength="16"/>
+									<button class="btn btn-success" @click="confirm_UDPW">确认修改</button>
+									<button class="btn btn-secondary" @click="cancel_UDPW">算了吧</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div v-else class="noInfo-font">
+						您还未登录，请先登录！
+					</div>
+				</div>
+				<div id="myBlogs">
+					<h3>我的动态</h3><hr />
+					<img src="../img/loading1.gif" class="loadingGIF" id="myBlogsLoading">
+					<div v-if="blogs.length > 0">
+						<div class="blog-block" v-for="(blog,i) in blogs">
+							<div class="blog-author">
+								<div class="author-avatar">
+									<img :src="blog.avatar" width="80px" />
+								</div>
+								<span>{{blog.author}}</span>
+							</div>
+							<div class="blog-content">
+								<p v-html="blog.content"></p>
+								<div v-for="picture in blog.pictures" class="blog-pictures">
+									<img width="300px" height="150px" v-bind:src="picture.url"/>
+								</div>
+								<div class="blog-info">
+									<span class="time-font">[{{blog.publishTime}}]</span>
+									<a href="javascript:void(0)" class="minor-font" @click="delBlog(blog.id,i)">删除</a>
+									<!-- <a href="javascript:void(0)" class="minor-font" @click="editBlog(blog.id,i)">编辑</a> -->
+									<a v-bind:href="'blog.html?id='+blog.id" class="minor-font">评论({{blog.commentCount}})</a>
+									<a href="javascript:void(0)" @click="doFavour(blog.id,i)" class="minor-font">赞({{blog.favourCount}})</a>
+								</div>
+							</div>
+							<div class="edit-part">
+								<div class="edit-preview">
+									<div class="edit-cont">
+										<textarea id="content" name="content" v-model="blog.content"></textarea>
+										<label for="pictures" class="uploadPic">
+											<input id="pictures" type="file" name="pictures" accept="image/*" multiple="multiple" class="hidden" @change="files_change">
+											<img src="../img/uploadPic.png" />
+										</label>
+									</div>
+									<div class="preview_Img" :style="previewImg_style">
+										<div class="img-block" v-for="(src,j) in old_src[i]">
+											<div class="img-close" title="移除图片" @click="deloldPic(j)">
+												<span>X</span>
+											</div>
+											<img :src="src.url"/>
+										</div>
+										<div class="img-block" v-for="(src,j) in img_src">
+											<div class="img-close" title="移除图片" @click="delPic(j)">
+												<span>X</span>
+											</div>
+											<img :src="src"/>
+										</div>
+									</div>
+								</div>
+								<div class="publish-part">
+									<button class="publish-btn btn-primary" id="cancle" type="button" @click="cancleEdite(i)">取消</button>
+									<button class="publish-btn btn-primary" id="submit" type="button" @click="publishBlog(blog.id,i)">发布</button>
+								</div>
+							</div>
+						</div>
+					</div> 
+					<div v-else class="noInfo-font">
+						您还没有发布动态!&nbsp;&nbsp;&nbsp;<a href="community.html">现在去发布</a>
+					</div>
+				</div>
+				<div id="myItems">
+					<h3>我的项目</h3><hr />
+					<img src="../img/loading1.gif" class="loadingGIF" id="myItemsLoading">
+					<div v-if="items.length > 0">
+						<ul>
+							<li v-for="(item,i) in items" @mouseenter="getCandidates(item.id,i)" @mouseleave="hideCandidates(i)">
+								<div class="item-main">
+									<div class="ToItemInfo" @click="ToItemPage(item.id)">
+										<span class="item-title siggleText" :title="item.title"><span style="color: #28A745;font-weight: 500;" v-show="item.state == 2">[已完成]</span>{{item.title}}</span>
+										<span class="item-price">报酬：{{item.price}}元</span>
+										<span class="item-price">已报名{{item.candCount}}人</span>
+									</div>
+									<img v-show="item.state == 1" src="../img/close.png" class="item-close" @click="closeItem(item.id,i)" alt="下架项目" title="下架该项目"/>
+								</div>
+								<div class="candidate-list">
+									<img src="../img/loading1.gif" class="loadingGIF" v-show="showLoading">
+									<div class="candidate-info" v-for="candidate in item.candidates" @click="candidate_Info(candidate.uid,candidate.iid)">
+										<img class="candidate-avatar" :src="candidate.avatar" />
+										<span class="user-name">{{candidate.user}}</span>
+										<span class="join-time">[{{candidate.createTime}}]</span>
+										<img class="BeSelected" src="../img/11573cd595c3aac.jpg!r650.jpg" v-if="candidate.state == 1" />
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div v-else class="noInfo-font">
+						您还没有发布项目!&nbsp;&nbsp;&nbsp;<a href="platform.html">现在去发布</a>
+					</div>
+				</div>
+				<div id="myOrders">
+					<span class="currOrders myOrdersH3" @click="change_ordersToCreated">我创建的订单</span>
+					<span class="currOrders myOrdersH3" @click="change_ordersToJoined">我接的订单</span><hr />
+					<table class="order-info table table-hover table-striped">
+						<tr height="50px">
+							<th width="200px">项目名称</th>
+							<th width="100px">金额</th>
+							<th width="105px">发布人</th>
+							<th width="105px">接受人</th>
+							<th width="200px">创建时间</th>
+						</tr>
+						<tr v-for="order in orders" height="40px" class="orderTr" @click="ToItemPage(order.iid)">
+							<td>{{order.itemTitle}}</td>
+							<td>￥{{order.price}}</td>
+							<td>{{order.author}}</td>
+							<td>{{order.user}}</td>
+							<td>{{order.createTime}}</td>
+						</tr>
+					</table>
+					<img src="../img/loading1.gif" class="loadingGIF" id="myOrdersLoading">
+					<div v-if="orders.length == 0" class="noInfo-font">
+						您还没有订单!
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--图片裁剪框 start-->
+		<div style="display: none" class="tailoring-container" id="tailoring-container">
+			<div class="black-cloth" onclick="closeTailor(this)"></div>
+			<div class="tailoring-content">
+					<div class="tailoring-content-one">
+						<label title="上传图片" for="chooseImg" class="l-btn choose-btn btn-outline-dark">
+							<input type="file" accept="image/jpg,image/jpeg,image/png" name="file" id="chooseImg" class="hidden" onchange="selectImg(this)">
+							选择图片
+						</label>
+						<div class="close-tailoring"  onclick="closeTailor(this)">×</div>
+					</div>
+					<div class="tailoring-content-two">
+						<div class="tailoring-box-parcel">
+							<img id="tailoringImg">
+						</div>
+						<div class="preview-box-parcel">
+							<p>图片预览：</p>
+							<div class="square previewImg"></div>
+							<div class="circular previewImg"></div>
+						</div>
+					</div>
+					<div class="tailoring-content-three">
+						<button class="cropper-reset-btn cropper-btn btn-outline-dark">复位</button>
+						<button class="cropper-rotate-btn cropper-btn btn-outline-dark">旋转</button>
+						<button class="cropper-scaleX-btn cropper-btn btn-outline-dark">换向</button>
+						<button class="sureCut cropper-btn btn-outline-dark" id="sureCut">确定</button>
+					</div>
+				</div>
+		</div>
+		<script src="../js/sourse/cropper.min.js"></script>
+		<script src="../js/imageUploader.js"></script>
+		<!--图片裁剪框 end-->
+	</div>
+</body>
+<script src="../js/center.js" type="text/javascript" charset="utf-8"></script>
+</html>

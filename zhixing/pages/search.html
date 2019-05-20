@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>搜索结果</title>
+		<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/general.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/header.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/search.css"/>
+		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+		<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+		<script src="http://how2j.cn/study/jquery.min.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<div id="header">
+				<login-component></login-component>
+				<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
+			</div>
+			<div class="main">
+				<div class="search_header">
+					<div class="searchbar">
+						<input type="text" name="inputvalue" class="inputvalue" spellcheck="true" v-model="inputvalue" @keypress="search(event)"/>
+						<a href="javascript:void(0)" class="searchbutton" @click="search_btn"><img src="../img/searchbutton.png" /></a>
+					</div>
+				</div>
+				<div class="search_content">
+					<h2>项目</h2><hr />
+					<img src="../img/loading1.gif" v-show="showItemLoading" class="loadingGIF" />
+					<div class="itemList">
+						<div v-if="items.length > 0" class="info-title">搜索到和“{{value}}”相关的项目：</div>
+						<a v-for="item in items" :href="'item.html?id='+item.id" title="点击查看项目详情" class="item-block">
+							<div class="published-item">
+								<div class="item-author">
+									<div class="author-avatar">
+										<img :src="item.avatar" width="80px" />
+									</div>
+									<span>{{item.author}}</span>
+								</div>
+								<div class="item-info">
+									<div class="item-header">
+										<span class="item-title">{{item.title}}</span>
+										<span class="item-price">报酬:{{item.price}}元</span>
+									</div>
+									<div class="item-description" v-html="item.description">
+									</div>
+									<span class="time-font">浏览量：{{item.viewCount}}</span>
+									<span class="time-font">发布时间：[{{item.createTime}}]</span>
+								</div>
+							</div>
+						</a>
+						<div v-if="items.length == 0" class="info-title">抱歉，没有找到和“{{value}}”相关的项目！</div>
+					</div>
+					<h2>用户</h2><hr />
+					<img src="../img/loading1.gif" v-show="showUserLoading" class="loadingGIF" />
+					<div class="userList">
+						<div v-if="users.length > 0" class="info-title">搜索到和“{{value}}”相关的用户：</div>
+						<a v-for="user in users" :href="'userInfo.html?uid='+user.id" title="点击查看用户详情" class="user-block">
+							<div class="published-item text-info">
+								<img :src="user.avatar" width="80px" height="80px"/>
+								<div class="user-info">
+									<span>昵称：{{user.nickname}}</span>
+									<span>账号：{{user.username}}</span>
+								</div>
+								<div class="user-info">
+									<span>性别：<b v-if="user.gender">男</b><b v-else>女</b></span>
+									<span>学校：{{user.college}}</span>
+								</div>
+							</div>
+						</a>
+						<div v-if="users.length == 0" class="info-title">抱歉，没有找到和“{{value}}”相关的用户！</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		$(function(){
+			$(".inputvalue").focus()
+		})
+		new Vue({
+			el:".main",
+			data:{
+				inputvalue:'',
+				value:'',
+				items:[],
+				users:[],
+				showItemLoading:true,
+				showUserLoading:true
+			},
+			created() {
+				this.inputvalue = this.getQueryString("value");
+				this.value = this.getQueryString("value");
+				this.searchItem(this.inputvalue)
+				// 搜索用户
+				this.searchUser(this.inputvalue)
+			},
+			methods:{
+				getQueryString:function (name) {
+				    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				    var r = window.location.search.substr(1).match(reg);
+				    if (r != null) return decodeURIComponent(r[2]);
+				    return null;
+				},
+				// 搜索
+				search:function(event){
+					if(event.keyCode == '13'){
+						this.search_btn()
+					}
+				},
+				search_btn:function(){
+					if(this.inputvalue != ''){
+						window.location.href="search.html?value="+this.inputvalue
+					}
+				},
+				// 搜索项目
+				searchItem:function(keyvalue){
+					this.showItemLoading = true
+					$(".itemList").hide()
+					var _this = this
+					axios({
+						method: "get",
+						url: "http://114.116.77.118:8888/item/searchByTitle",
+						dataType: "json",
+						params:{
+							keyword:keyvalue
+						},
+						crossDomain: true,
+						cache: false
+					}).then(function(res){
+						_this.showItemLoading = false
+						$(".itemList").show()
+						if(res.data.status == 1){
+							_this.items = res.data.data
+							var reg = new RegExp("\n|\r\n", "g");//g,表示全部替换
+							for(var i = 0;i < _this.items.length;i++){
+								_this.items[i].description = _this.items[i].description.replace(reg, "<br/>")
+								_this.items[i].description = _this.items[i].description.replace(/\s/g, "&nbsp;")
+							}
+						}else{
+							alert(res.data.message)
+						}
+					}).catch(function(error){
+						alert(error)
+					})
+				},
+				// 搜索用户
+				searchUser:function(keyvalue){
+					$(".userList").hide()
+					this.showUserLoading = true
+					this.items = []
+					var _this = this
+					// 先按昵称搜索
+					axios({
+						method: "get",
+						url: "http://114.116.77.118:8888/user/searchByNickname",
+						dataType: "json",
+						params:{
+							keyword:keyvalue
+						},
+						crossDomain: true,
+						cache: false
+					}).then(function(res){
+						_this.showUserLoading = false
+						$(".userList").show()
+						if(res.data.status == 1){
+							_this.users.push.apply(_this.users,res.data.data)
+						}else{
+							alert(res.data.message)
+						}
+					}).catch(function(error){
+						alert(error)
+					})
+					// 再按用户名搜索
+					axios({
+						method: "get",
+						url: "http://114.116.77.118:8888/user/searchByUsername",
+						dataType: "json",
+						params:{
+							keyword:keyvalue
+						},
+						crossDomain: true,
+						cache: false
+					}).then(function(res){
+						_this.showUserLoading = false
+						if(res.data.status == 1){
+							_this.users.push.apply(_this.users,res.data.data)
+						}else{
+							alert(res.data.message)
+						}
+					}).catch(function(error){
+						alert(error)
+					})
+				},
+			}
+		})
+	</script>
+</html>

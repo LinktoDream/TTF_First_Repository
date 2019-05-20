@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <script src="http://how2j.cn/study/jquery.min.js"></script>
+    <script src="http://how2j.cn/study/vue.min.js"></script>
+	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/general.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/header.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/blog.css"/>
+    <meta charset="UTF-8">
+    <title>致行——动态详情</title>
+</head>
+<body>
+	<div id="app">
+		<div id="header">
+			<!-- 登陆组件 -->
+			<login-component></login-component>
+		</div>
+		<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
+		<hr >
+		<div id="blogDetails" class="animated fadeInLeftBig">
+			<div class="item-info">
+				<div class="infomation">
+					<div class="blog-header">
+						<img :src="blog.avatar" width="80px" />
+						<div class="header-info">
+							<h3>{{blog.author}}</h3>
+							<span class="minor_title">发布时间：[{{blog.publishTime}}]</span>
+						</div>
+					</div>
+					<div class="blog-info">
+						<p v-html="blog.content"></p>
+						<div class="blog-photo">
+							<div v-for="(picture,index) in blog.pictures" class="photoMiddle">
+								<img width="400px" v-bind:src="picture.url"/>
+							</div>
+						</div>
+						<div class="blog-footer">
+							<span class="minor_title">浏览量：{{blog.viewCount}}</span>
+							<a href="#comments">评论({{blog.commentCount}})</a>
+							<a href="javascript:void(0)" @click="doFavour(blog.id)">赞({{blog.favourCount}})</a>	
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="comments" id="comments">
+				<h4>评论&nbsp;&nbsp;<span class="minor_title">共{{blog.commentCount}}条评论</span></h4><hr/>
+				<form id="commentForm">
+					<input type="hidden" name="bid" v-bind:value="blog.id">
+					<div id="commentArea">
+						<div class="textarea-parent">
+							<textarea name="content" maxlength="140" v-model="comment_content"></textarea>
+						</div>
+						<div class="comment-btn">
+							<button class="btn btn-info" onclick="comment()" type="button">评论</button>
+							<!-- 随着输入字符递减 -->
+							<span>{{140-comment_length()}}</span>
+						</div>
+					</div>
+				</form>
+				<h5>精彩评论</h5><hr/>
+				<div class="comments-data">
+					<ul>
+						<li v-for="(comment,index) in blog.comments">
+							<span class="comment-author">{{comment.author}}</span>
+							<div class="comment-content">
+								<div class="repliedContent" v-if="comment.rid != null" v-html="'回复：['+comment.reply+']'"></div>
+								<span v-html="comment.content"></span>
+							</div><br />
+							<a href="javascript:void(0)" @click="openReplyPannel(index)">回复</a>
+							<div class="replyText">
+								<textarea :placeholder="'回复 '+comment.author+' :'" v-model="replyText"></textarea>
+								<button type="button" class="btn btn-primary" @click="closeReplyPannel(index)">取消</button>
+								<button type="button" class="btn btn-primary" @click="reply(comment.id,blog.id)">发表</button>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+    $(function () {
+        var id = getQueryString("id");
+        getBlog(id);
+    })
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+    function getBlog(id) {
+        var data = {"id": id};
+        $.ajax({
+            url:"http://114.116.77.118:8888/blog/getById",
+            type:"get",
+            data:data,
+            datatype:"json",
+            success:function (result) {
+                new Vue({
+                    el: "#blogDetails",
+                    data: {
+                        blog: result.data,
+						// 评论内容
+						comment_content:'',
+						// 回复内容
+						replyText:''
+                    },
+					created() {
+						console.log(this.blog)
+						var reg = new RegExp("\n|\r\n", "g");//g,表示全部替换
+						this.blog.content = this.blog.content.replace(reg, "<br/>");
+						this.getComments(this.blog.id)
+					},
+					methods:{
+						// 评论剩余字数变化
+						comment_length:function(){
+							return this.comment_content.length
+						},
+						// 点赞
+						doFavour:function (bid) {
+							var _this = this
+						    var data = {"bid": bid};
+						    axios({
+						        url: "http://114.116.77.118:8888/favour/doFavour",
+						        method: "get",
+						        params: data,
+						        dataType:"json",
+								withCredentials: true ,// 这里设置了withCredentials
+								}).then(function (result) {
+						            if (result.data.status == 1) {
+						                _this.blog.favourCount++
+						            } else {
+						                alert(result.data.message);
+						            }
+						        }).catch(function (error) {
+						            alert("点赞失败。");
+						        })
+						},
+						// 获取动态评论
+						getComments:function(bid){
+							var _this = this
+							var data = {"bid": bid};
+							axios({
+							    url: "http://114.116.77.118:8888/comment/list",
+							    method: "get",
+								params: data,
+							    dataType:"json",
+								withCredentials: true ,// 这里设置了withCredentials
+							}).then(function (result) {
+								if (result.data.status == 1) {
+									_this.blog.comments = result.data.data
+									var reg = new RegExp("\n|\r\n", "g");//g,表示全部替换
+									for(var i = 0;i < _this.blog.comments.length;i++){
+										_this.blog.comments[i].content = _this.blog.comments[i].content.replace(reg, "<br/>");
+										_this.blog.comments[i].content = _this.blog.comments[i].content.replace(/\s/g, "&nbsp");
+										if(_this.blog.comments[i].rid != null){
+											_this.blog.comments[i].reply = _this.blog.comments[i].reply.replace(reg, "<br/>");
+											_this.blog.comments[i].reply = _this.blog.comments[i].reply.replace(/\s/g, "&nbsp");
+										}
+									}
+								} else {
+									alert(result.data.message);
+								}
+							}).catch(function (error) {
+								alert(error);
+							})
+						},
+						// 打开回复面板
+						openReplyPannel:function(i){
+							$(".replyText").eq(i).show()
+						},
+						// 关闭回复面板
+						closeReplyPannel:function(i){
+							$(".replyText").eq(i).hide()
+						},
+						reply:function(rid,bid) {
+							var _this = this
+						    var data = {
+								"rid":rid,
+								"bid":bid,
+								"content":this.replyText
+							}
+							axios({
+							    url: "http://114.116.77.118:8888/comment/reply",
+							    method: "post",
+								params: data,
+							    dataType:"json",
+								withCredentials: true ,// 这里设置了withCredentials
+							}).then(function (result) {
+								if (result.data.status == 1) {
+									_this.getComments(_this.blog.id)
+								} else {
+									alert(result.data.message);
+								}
+							}).catch(function (error) {
+								alert(error);
+							})
+						}
+					}
+                })
+            },
+            error:function () {
+                alert("获取动态失败！");
+            }
+        })
+    }
+    function comment() {
+        $.ajax({
+            url: "http://114.116.77.118:8888/comment/publish",
+            type: "post",
+            dataType:"json",
+            data: $("#commentForm").serialize(),
+			xhrFields: {
+				withCredentials: true // 这里设置了withCredentials
+			},
+            success : function (result) {
+                if (result.status == 1) {
+                    window.location.reload();
+                } else {
+                    alert(result.message);
+                }
+            },
+            error : function () {
+                alert("评论失败。");
+            }
+        });
+    }
+</script>
+</html>
