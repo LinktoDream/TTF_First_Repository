@@ -154,3 +154,9 @@
 #userInfo{
 	margin-top: 20px;
 }
+.loadMore{
+	width: 100%;
+}
+.loadMore button{
+	width: 100%;
+}
