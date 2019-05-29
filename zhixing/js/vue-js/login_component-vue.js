@@ -9,8 +9,8 @@ Vue.component("login-component",{
 						'</div>'+
 						'<div class="login_input" v-show="IsLogin_Show">'+
 							'<div class="form-group">'+
-								'<label class="sr-only" for="login-InputEmail">手机号/邮箱</label>'+
-								'<input type="email" class="form-control" id="login-InputEmail" placeholder="请输入手机号" v-model="login_userID" @keypress="login(event)">'+
+								'<label class="sr-only" for="login-InputEmail">手机号</label>'+
+								'<input type="number" class="form-control" id="login-InputEmail" placeholder="请输入手机号" v-model="login_userID" @keypress="login(event)">'+
 							'</div>'+
 							'<div class="form-group">'+
 								'<label class="sr-only" for="id-InputPassword">密码</label>'+
@@ -22,8 +22,8 @@ Vue.component("login-component",{
 						'<div class="register_input" v-show="IsRegister_Show">'+
 							'<span class="warning-info" v-show="IsIDLegal==\'no\'">{{message}}</span>'+
 							'<div class="form-group">'+
-								'<label class="sr-only" for="register-InputEmail">账号</label>'+
-								'<input type="email" :class="ID_style" class="form-control" id="register-InputEmail" placeholder="请输入注册手机号" v-model="register_userID" maxlength="16" @blur.prevent="IsRegisterIDLegal($event)" @focus="ID_focus">'+
+								'<label class="sr-only" for="register-InputEmail">手机号</label>'+
+								'<input type="number" :class="ID_style" class="form-control" id="register-InputEmail" placeholder="请输入注册手机号" v-model="register_userID" maxlength="16" @blur.prevent="IsRegisterIDLegal($event)" @focus="ID_focus">'+
 							'</div>'+
 							'<span class="warning-info" v-show="IsPWLegal==\'little\'">密码长度不小于8位</span>'+
 							'<div class="form-group">'+
@@ -44,30 +44,43 @@ Vue.component("login-component",{
 					'</div>'+
 				'</div>'+
 				'<div class="header" >'+
-					'<div class="logo"><img src="../img/LOGO.png" height="70px"/></div>'+
-					'<div class="user-img" v-if="user != null">'+
-						'<a href="center.html"><img :src="user.avatar" width="60px"></a>'+
-						'<div class="bord">'+
-							'<ul>'+
-								'<li @click="exitLogin">退出</li>'+
-							'</ul>'+
-						'</div>'+
+					'<div class="logo"><a href="index.html" class="header_a"><img src="../img/LOGO.png" height="70px"/></a></div>'+
+					'<div class="user-img dropdown" v-if="user != null">'+
+						'<a href="javascript:void(0)" class="header_a" data-toggle="dropdown"><img :src="user.avatar" width="60px"></a>'+
+						'<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">'+
+							'<li role="presentation" ><a href="center.html" role="menuitem" tabindex="-1">个人中心</a></li>'+
+							'<li role="presentation" class="divider"></li>'+
+							'<li role="presentation" @click="exitLogin"><a role="menuitem" tabindex="-1">退出</a></li>'+
+						'</ul>'+
 					'</div>'+
 					'<div class="login" v-else>'+
 						'<a href="javascript:void(0)" @click="OpenLogin">登陆 | 注册</a>'+
 					'</div>'+
-					'<div class="header-nav">'+
+					'<div class="dropdown headNavMenu" v-if="IsMenu">'+
+						'<button class="btn-down" data-toggle="dropdown">{{currentHeadNav}}&nbsp;<span class="glyphicon glyphicon-th-list"></span></button>'+
+						'<ul class="dropdown-menu head-menu" role="menu">'+
+							'<li role="presentation" ><a href="index.html">首页</a></li>'+
+							'<li role="presentation" ><a href="ItemLobby.html">项目大厅</a></li>'+
+							'<li role="presentation" ><a href="community.html">社区</a></li>'+
+							'<li role="presentation" ><a href="platform.html">项目发布</a></li>'+
+						'</ul>'+
+					'</div>'+
+					'<div class="header-nav" v-else>'+
 						'<ul>'+
 							'<li><a href="index.html">首页</a></li>'+
 							'<li><a href="ItemLobby.html">项目大厅</a></li>'+
 							'<li><a href="community.html">社区</a></li>'+
 							'<li><a href="platform.html">项目发布</a></li>'+
-							'<li><a href="center.html">个人中心</a></li>'+
 						'</ul>'+
 					'</div>'+
 				'</div></div>',
 	data:function(){
 		return{
+			// 首部导航显示样式
+			IsMenu:false,
+			currentHeadNav:"",
+			// 屏幕宽度
+			screenWidth:$(document).width(),
 			// 是否登陆
 			IsShow_Login:false,
 			IsLogin_Show:true,
@@ -104,7 +117,7 @@ Vue.component("login-component",{
 	},
 	created() {
 		//检测登陆状态
-		var _this = this
+		const _this = this
 		axios({
 			method: "get",
 			url: "http://114.116.77.118:8888/user/getLoginUser",
@@ -121,8 +134,41 @@ Vue.component("login-component",{
 		}).catch(function(error){
 			alert(error)
 		})
+		// 依据显示宽度改变首部导航栏样式
+		this.IsMenuEvent($(document).width())
+		let pathname = window.location.pathname
+		if(pathname == "/zhixing/pages/index.html"){
+			this.currentHeadNav = "首页"
+		}else if(pathname == "/zhixing/pages/ItemLobby.html"){
+			this.currentHeadNav = "项目大厅"
+		}else if(pathname == "/zhixing/pages/community.html"){
+			this.currentHeadNav = "社区"
+		}else if(pathname == "/zhixing/pages/platform.html"){
+			this.currentHeadNav = "项目发布"
+		}
+	},
+	mounted() {
+		window.onresize = () => {
+			return (() => {
+				this.screenWidth = $(document).width()
+			})()
+		}
+	},
+	watch:{
+		'screenWidth':function(newVal){
+			this.IsMenuEvent(newVal)
+		}
 	},
 	methods:{
+		// 可视区域小于767px事件
+		IsMenuEvent:function(val){
+			if(val < 767){
+				this.IsMenu = true
+			}else{
+				this.IsMenu = false
+			}
+			console.log(this.IsMenu)
+		},
 		// 切换登陆
 		SwitchLogin:function(){
 			this.IsLogin_Show = true
@@ -213,7 +259,7 @@ Vue.component("login-component",{
 			}else if(_this.register_userName.length === 0){
 				_this.Name_style = _this.warning_style
 			}else{
-				var formData = new FormData();
+				let formData = new FormData();
 				formData.append("username",_this.register_userID)
 				formData.append("password",_this.register_userPW)
 				formData.append("nickname",_this.register_userName)
@@ -322,9 +368,9 @@ Vue.component("login-component",{
 		// Name-input获取焦点事件：清除错误警告
 		Name_focus:function(){
 			this.Name_style = null
-		}
-	}
+		},
+	},
 });
-var lo_component = new Vue({
+new Vue({
 	el:'#header',
 })

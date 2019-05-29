@@ -98,3 +98,26 @@ function Show_myBlogs(){
 	current_li.attr("class","current-nav")
 	$(".main-nav li").not(current_li).removeAttr("class")
 }
+$(".openNav").click(function(){
+	if($(".openNav").hasClass("glyphicon-chevron-right")){
+		$(".main-nav").animate({
+			left:'0'
+		})
+	}else{
+		$(".main-nav").animate({
+			left:'-43%'
+		})
+	}
+	$(".openNav").toggleClass("glyphicon-chevron-right")
+	$(".openNav").toggleClass("glyphicon-chevron-left")
+})
+
+$(".main-content").click(function(){
+	if($(".openNav").hasClass("glyphicon-chevron-left")){
+		$(".main-nav").animate({
+			left:'-43%'
+		})
+		$(".openNav").toggleClass("glyphicon-chevron-right")
+		$(".openNav").toggleClass("glyphicon-chevron-left")
+	}
+})

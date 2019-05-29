@@ -167,7 +167,8 @@ function getItemList() {
 				data: {
 					items: [],
 					status: result.status,
-					showLoading:true
+					showLoading:true,
+					IsCandidateShow:false
 				},
 				created() {
 					if(result.status == 1){
@@ -177,37 +178,80 @@ function getItemList() {
 				methods:{
 					// 获取候选人列表
 					getCandidates:function(id,index){
-						var data = {"iid":id}
-						var _this = this
-						axios({
-							method:"get",
-							url:"http://114.116.77.118:8888/candidate/list",
-							dataType:"json",
-							params:data,
-							crossDomain: true,
-							cache: false,
-							withCredentials: true, // 允许携带cookie
-						}).then(function(res){
-							if(res.data.status == 1){
-								_this.items[index].candidates = res.data.data
-								_this.showLoading = false
-								for(var i = 0;i < res.data.data.length;i++){
-									if(_this.items[index].candidates[i].state == 1){
-										// 被选中的候选者处理
+						if($(document).width() > 767){
+							var data = {"iid":id}
+							var _this = this
+							axios({
+								method:"get",
+								url:"http://114.116.77.118:8888/candidate/list",
+								dataType:"json",
+								params:data,
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								if(res.data.status == 1){
+									_this.items[index].candidates = res.data.data
+									_this.showLoading = false
+									for(var i = 0;i < res.data.data.length;i++){
+										if(_this.items[index].candidates[i].state == 1){
+											// 被选中的候选者处理
+										}
 									}
+								}else{
+									alert(res.data.message)
 								}
-							}else{
-								alert(res.data.message)
-							}
-						}).catch(function(error){
-							alert(error)
-						})
-						$(".candidate-list").eq(index).show()
+							}).catch(function(error){
+								alert(error)
+							})
+							$(".candidate-list").eq(index).show()
+						}
+					},
+					openCandidate:function(id,index){
+						if(!this.IsCandidateShow){
+							var data = {"iid":id}
+							var _this = this
+							axios({
+								method:"get",
+								url:"http://114.116.77.118:8888/candidate/list",
+								dataType:"json",
+								params:data,
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								if(res.data.status == 1){
+									_this.items[index].candidates = res.data.data
+									_this.showLoading = false
+									_this.IsCandidateShow = true
+									$(".candidate-list").eq(index).show()
+									$(".openCandidate").eq(index).toggleClass("glyphicon-chevron-down")
+									$(".openCandidate").eq(index).toggleClass("glyphicon-chevron-up")
+									for(var i = 0;i < res.data.data.length;i++){
+										if(_this.items[index].candidates[i].state == 1){
+											// 被选中的候选者处理
+										}
+									}
+								}else{
+									alert(res.data.message)
+								}
+							}).catch(function(error){
+								alert(error)
+							})
+						}else{
+							$(".candidate-list").eq(index).hide()
+							this.showLoading = true
+							this.IsCandidateShow = false
+							$(".openCandidate").eq(index).toggleClass("glyphicon-chevron-down")
+							$(".openCandidate").eq(index).toggleClass("glyphicon-chevron-up")
+						}
 					},
 					// 隐藏候选人列表
 					hideCandidates:function(index){
-						$(".candidate-list").eq(index).hide()
-						this.showLoading = true
+						if($(document).width() > 767){
+							$(".candidate-list").eq(index).hide()
+							this.showLoading = true
+						}
 					},
 					ToItemPage:function(id){
 						window.location.href = "item.html?id="+id
@@ -217,25 +261,27 @@ function getItemList() {
 					},
 					// 下架项目
 					closeItem:function(id,index){
-						var data = {"id":id}
-						var _this = this
-						axios({
-							method:"post",
-							url:"http://114.116.77.118:8888/item/close",
-							dataType:"json",
-							params:data,
-							crossDomain: true,
-							cache: false,
-							withCredentials: true, // 允许携带cookie
-						}).then(function(res){
-							if(res.data.status == 1){
-								_this.items[index].state = 0
-							}else{
-								alert(res.data.message)
-							}
-						}).catch(function(error){
-							alert(error)
-						})
+						if(confirm("确定下架该项目吗？")){
+							var data = {"id":id}
+							var _this = this
+							axios({
+								method:"post",
+								url:"http://114.116.77.118:8888/item/close",
+								dataType:"json",
+								params:data,
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								if(res.data.status == 1){
+									_this.items[index].state = 0
+								}else{
+									alert(res.data.message)
+								}
+							}).catch(function(error){
+								alert(error)
+							})
+						}
 					}
 				}
 			})
@@ -543,9 +589,28 @@ function getOrderList(){
 		el:"#myOrders",
 		data:{
 			orders:[],
+			showAsList:false,
+			// 屏幕宽度
+			screenWidth:$(document).width(),
 		},
 		created() {
 			this.getMyCreated()
+		},
+		mounted() {
+			window.onresize = () => {
+				return (() => {
+					this.screenWidth = $(document).width()
+				})()
+			}
+		},
+		watch:{
+			'screenWidth':function(newVal){
+				if(newVal < 767){
+					this.showAsList = true
+				}else{
+					this.showAsList = false
+				}
+			}
 		},
 		methods:{
 			// 获取自己创建的订单
@@ -648,6 +713,30 @@ function getOrderList(){
 		}
 	})
 }
+
+$(".openNav").click(function(){
+	if($(".openNav").hasClass("glyphicon-chevron-right")){
+		$(".main-nav").animate({
+			left:'0'
+		})
+	}else{
+		$(".main-nav").animate({
+			left:'-43%'
+		})
+	}
+	$(".openNav").toggleClass("glyphicon-chevron-right")
+	$(".openNav").toggleClass("glyphicon-chevron-left")
+})
+
+$(".main-content").click(function(){
+	if($(".openNav").hasClass("glyphicon-chevron-left")){
+		$(".main-nav").animate({
+			left:'-43%'
+		})
+		$(".openNav").toggleClass("glyphicon-chevron-right")
+		$(".openNav").toggleClass("glyphicon-chevron-left")
+	}
+})
 
 function Show_userInfo(){
 	$("#userInfo").show()

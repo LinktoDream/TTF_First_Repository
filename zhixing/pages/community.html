@@ -2,15 +2,16 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
     <title>致行——社区</title>
     <script src="http://how2j.cn/study/jquery.min.js"></script>
     <script src="http://how2j.cn/study/vue.min.js"></script>
 	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/general.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/header.css"/>
-	<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/community.css"/>
 </head>
 <body>
@@ -52,25 +53,25 @@
 						<div class="blog-block" v-for="(blog,i) in blogs">
 							<div class="blog-author">
 								<div class="author-avatar">
-									<img :src="blog.avatar" width="80px" />
+									<img :src="blog.avatar"/>
 								</div>
 								<span>{{blog.author}}</span>
 							</div>
 							<div class="blog-content">
 								<p v-html="blog.content"></p>
 								<div v-for="picture in blog.pictures" class="blog-pictures">
-									<img width="500px" v-bind:src="picture.url"/>
+									<img :src="picture.url"/>
 								</div>
 								<div class="blog-info">
 									<span class="time-font">[{{blog.publishTime}}]</span>
-									<a v-bind:href="'blog.html?id='+blog.id" class="minor-font">评论({{blog.commentCount}})</a>&nbsp;&nbsp;
+									<a :href="'blog.html?id='+blog.id" class="minor-font">评论({{blog.commentCount}})</a>
 									<a href="javascript:void(0)" @click="doFavour(blog.id,i)" class="minor-font">赞({{blog.favourCount}})</a>
 								</div>
 							</div>
 						</div>
 						<img src="../img/loading1.gif" class="loadingGIF" v-show="loadMoreLoadingPIC"/>
 						<div class="loadMore">
-							<button class="btn btn-light" @click="loadMore">加载更多</button>
+							<button class="btn btn-default" @click="loadMore">加载更多</button>
 						</div>
 					</div> 
 					<div v-else style="text-align: center;">
@@ -82,7 +83,7 @@
 			<div class="right_part">
 				<div id="userInfo">
 					<div v-if="status == 1">
-						<a href="center.html"><img width="80px" height="80px" v-bind:src="user.avatar"/></a><br>
+						<a href="center.html"><img width="80px" height="80px" :src="user.avatar"/></a><br>
 						<hr />
 						账号：{{user.username}}<br>
 						昵称：{{user.nickname}}<br>
@@ -95,5 +96,7 @@
 		</div>
 	</div>
 </body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="../js/community.js" type="text/javascript" charset="utf-8"></script>
 </html>

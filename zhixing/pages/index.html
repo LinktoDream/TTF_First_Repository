@@ -2,8 +2,9 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
-		<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="../css/general.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/header.css"/>
@@ -11,19 +12,21 @@
 		<link rel="stylesheet" type="text/css" href="../css/index.css"/>
 		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
 		<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
-		<script src="http://how2j.cn/study/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<title>致行——首页</title>
 	</head>
 	<body>
-		<div id="app">
+		<div id="app" class="animated fadeInLeft">
 			<div id="header">
 			<!-- 登陆组件 -->
 				<login-component></login-component>
-			</div>	
+			</div>
 			<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
-			<div class="main animated fadeInLeft">
+			<div class="main">
 				<!-- 广告栏 -->
 				<div class="banner">
+					<img class="banner-bg" src="../img/banner.jpg" />
 					<h1>致行——<br>&nbsp;&nbsp;&nbsp;&nbsp;大学生自己的外包平台</h1>
 					<div class="searchbar">
 						<input type="text" class="inputvalue" placeholder="搜索项目/用户" spellcheck="true" v-model="inputvalue" @keypress="search(event)"/>
@@ -31,7 +34,7 @@
 					</div>
 				</div>
 				<!-- 导航栏 -->
-				<div class="nav">
+				<div class="index-nav">
 					<ul>
 						<li :style="style_nav1" @click="nav1">首页推荐</li>
 						<li :style="style_nav2" @click="nav2">最新发布</li>
@@ -61,7 +64,7 @@
 				<div class="minor">
 					<!-- 昨日订单 -->
 					<div class="yesterday">
-						<h1 style="font-weight: 200;text-align: center;">
+						<h1>
 							<span v-for="i in 10">：</span>
 							最新在致行成交的订单
 							<span v-for="i in 10">：</span>
@@ -79,9 +82,15 @@
 					</div>
 					<!-- 滑动栏 -->
 					<div class="slider" @mouseenter="slider_mouseenter" @mouseleave="slider_mouseleave">
-						<img v-for="(url,index) in img_url" v-show="index == slider_index" :style="style_slider" :src="url" width="1275px" height="320px" >
+						<img v-for="(url,index) in img_url" v-show="index == slider_index" :style="style_slider" :src="url" width="100%">
 						<a href="javascript:void(0)" class="prev change" @click="prev" v-show="prev_next_show"><img src="../img/prev.png" /></a>
 						<a href="javascript:void(0)" class="next change" @click="next" v-show="prev_next_show"><img src="../img/next.png" /></a>
+					</div>
+					<div class="" style="text-align: center;">
+						<ul class="pagination">
+							<li class="btn btn-default" @click="prev">&laquo;</li>
+							<li class="btn btn-default" @click="next">&raquo;</li>
+						</ul>
 					</div>
 				</div>
 				<!-- 底部 -->
@@ -117,6 +126,6 @@
 				</footer>
 			</div>
 		</div>
-		<script src="../js/vue-js/index-vue.js" type="text/javascript" charset="utf-8"></script>
 	</body>
+	<script src="../js/vue-js/index-vue.js" type="text/javascript" charset="utf-8"></script>
 </html>

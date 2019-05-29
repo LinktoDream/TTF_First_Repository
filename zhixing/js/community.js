@@ -15,7 +15,7 @@ new Vue({
 		this.getBlogList(this.pageSize,1)
 	},
 	methods:{
-		/*****头像预览*****/
+		/*****图片预览*****/
 		// 删除图片
 		delPic:function(index){
 			this.img_files.splice(index,1)
@@ -58,7 +58,7 @@ new Vue({
 			}
 			return url ;
 		},
-		/*****头像预览-end*****/
+		/*****图片预览-end*****/
 		publishBlog:function() {
 			var files = this.img_files;
 			var content = this.text_content;

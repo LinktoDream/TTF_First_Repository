@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <script src="http://how2j.cn/study/jquery.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
     <script src="http://how2j.cn/study/vue.min.js"></script>
 	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/general.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/header.css"/>
-	<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/item.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/footer.css"/>
-    <meta charset="UTF-8">
     <title>致行——项目详情</title>
 </head>
 <body>
@@ -23,26 +25,6 @@
 		<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
 		<hr />
 		<div id="itemDetails" class="animated fadeInLeftBig">
-			<div class="left-part">
-				<div class="item-img">
-					<img src="../img/intro.jpg" width="460px" height="300px"/>
-				</div>
-				<div class="join-list">
-					<h4>报名列表</h4>
-					<div class="list-item">
-						<ul>
-							<li v-for="candidate in item.candidates" @click="candidate_Info(candidate.uid,candidate.iid)">
-								<img v-if="candidate.state == 1" src="../img/11573cd595c3aac.jpg!r650.jpg" style="margin-top: 10px;margin-left: 10px;" />
-								<div class="candidate-info">
-									<img :src="candidate.avatar" />
-									<span class="user-name">{{candidate.user}}</span>
-									<span class="join-time">[{{candidate.createTime}}]</span>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
 			<div class="item-info">
 				<div class="infomation">
 					<h3><span v-show="item.state == 2" style="color: #28A745;font-weight: 500;">[已完成]</span>{{item.title}}</h3>
@@ -55,6 +37,26 @@
 				<div class="item-detail">
 					<h4>详细描述</h4>
 					<div class="details" v-html="item.description">
+					</div>
+				</div>
+			</div>
+			<div class="left-part">
+				<div class="item-img">
+					<img src="../img/intro.jpg" width="460px" height="300px"/>
+				</div>
+				<div class="join-list">
+					<h4>报名列表</h4>
+					<div class="list-item">
+						<ul>
+							<li v-for="candidate in item.candidates" @click="candidate_Info(candidate.uid,candidate.iid)">
+								<img class="selectedImg" v-if="candidate.state == 1" src="../img/11573cd595c3aac.jpg!r650.jpg"/>
+								<div class="candidate-info">
+									<img :src="candidate.avatar" />
+									<span class="user-name">{{candidate.user}}</span>
+									<span class="join-time">[{{candidate.createTime}}]</span>
+								</div>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>

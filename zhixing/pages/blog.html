@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <script src="http://how2j.cn/study/jquery.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
     <script src="http://how2j.cn/study/vue.min.js"></script>
 	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/general.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/header.css"/>
-	<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/blog.css"/>
-    <meta charset="UTF-8">
     <title>致行——动态详情</title>
 </head>
 <body>
@@ -25,7 +27,7 @@
 			<div class="item-info">
 				<div class="infomation">
 					<div class="blog-header">
-						<img :src="blog.avatar" width="80px" />
+						<img :src="blog.avatar"/>
 						<div class="header-info">
 							<h3>{{blog.author}}</h3>
 							<span class="minor_title">发布时间：[{{blog.publishTime}}]</span>
@@ -35,7 +37,7 @@
 						<p v-html="blog.content"></p>
 						<div class="blog-photo">
 							<div v-for="(picture,index) in blog.pictures" class="photoMiddle">
-								<img width="400px" v-bind:src="picture.url"/>
+								<img v-bind:src="picture.url"/>
 							</div>
 						</div>
 						<div class="blog-footer">

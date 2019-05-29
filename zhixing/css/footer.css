@@ -1,66 +1,73 @@
-/* 底部 */
-.footer a{
-	text-decoration: none;
-	color: #FFFFFF;
-	opacity: 0.8;
+@media (min-width:767px) {
+	/* 底部 */
+	.footer a{
+		text-decoration: none;
+		color: #FFFFFF;
+		opacity: 0.8;
+	}
+	.footer{
+		width: 100%;
+		height: 235px;
+		background-color: #000000;
+	}
+	.footer-nav{
+		width: 1200px;
+		height: 140px;
+		margin: 0 auto;
+		border-bottom: 1px solid #FFFFFF;
+	}
+	.footer-nav ul{
+		line-height: 140px;
+	}
+	.footer-nav li{
+		display: inline-block;
+		height: 40px;
+		line-height: 40px;
+		margin-right: 40px;
+		
+		color: #FFFFFF;
+	}
+	.footer-nav li a:hover{
+		text-decoration: none;
+		color: #FFFFFF;
+		opacity: 1;
+	}
+	.footer-nav img{
+		opacity: 0.8;
+	}
+	.footer-nav img:hover{
+		opacity: 1;
+	}
+	.weixin{
+		margin-left: 140px;
+	}
+	.weibo{
+		margin-left: 45px;
+	}
+	.legal-info{
+		width: 1250px;
+		height: 94px;
+		margin: 0 auto;
+		color: #FFFFFF;
+	}
+	.legal-info li{
+		display: inline-block;
+		height: 40px;
+		line-height: 40px;
+		margin-left: 25px;
+		margin-right: 25px;
+	}
+	.legal-info li a{
+		font-size: 14px;
+	}
+	.legal-info li a:hover{
+		text-decoration: none;
+		color: #FFFFFF;
+		opacity: 1;
+	}
 }
-.footer{
-	width: 100%;
-	height: 235px;
-	background-color: #000000;
-}
-.footer-nav{
-	width: 1200px;
-	height: 140px;
-	margin: 0 auto;
-	border-bottom: 1px solid #FFFFFF;
-}
-.footer-nav ul{
-	line-height: 140px;
-}
-.footer-nav li{
-	display: inline-block;
-	height: 40px;
-	line-height: 40px;
-	margin-right: 40px;
-	
-	color: #FFFFFF;
-}
-.footer-nav li a:hover{
-	text-decoration: none;
-	color: #FFFFFF;
-	opacity: 1;
-}
-.footer-nav img{
-	opacity: 0.8;
-}
-.footer-nav img:hover{
-	opacity: 1;
-}
-.weixin{
-	margin-left: 140px;
-}
-.weibo{
-	margin-left: 45px;
-}
-.legal-info{
-	width: 1250px;
-	height: 94px;
-	margin: 0 auto;
-	color: #FFFFFF;
-}
-.legal-info li{
-	display: inline-block;
-	height: 40px;
-	line-height: 40px;
-	margin-left: 25px;
-	margin-right: 25px;
-}
-.legal-info li a{
-	font-size: 14px;
-}
-.legal-info li a:hover{
-	text-decoration: none;
-	color: #FFFFFF;
-	opacity: 1;
+@media (max-width:767px) {
+	.footer{
+		display: none;
+	}
 }

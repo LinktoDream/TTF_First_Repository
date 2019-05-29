@@ -26,7 +26,10 @@ new Vue({
 		slider_interval:{},
 		
 		// 搜索
-		inputvalue:''
+		inputvalue:'',
+
+		//	可视区域宽度
+		screenWidth:$(document).width()
 	},
 	created() {
 		this.style_nav1 = this.current_nav
@@ -35,6 +38,20 @@ new Vue({
 		this.getLatestOrders()
 		//定时slider轮播
 		this.slider_interval = setInterval(this.slider_action,3000)
+	},
+	mounted() {
+		window.onresize = () => {
+			return (() => {
+				this.screenWidth = document.body.clientWidth
+			})()
+		}
+	},
+	watch:{
+		'screenWidth':function(newVal){
+			if(newVal < 767){
+				clearInterval(this.slider_interval)
+			}
+		}
 	},
 	methods:{
 		//导航栏nav切换

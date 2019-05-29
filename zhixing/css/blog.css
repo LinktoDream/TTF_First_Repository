@@ -1,162 +1,339 @@
-#blogDetails{
-	width: 982px;
-	margin: 0 auto;
-	margin-top: 50px;
-	padding-bottom: 30px;
-	border-radius: 10px;
-	box-shadow: 0px 0px 10px #DDDDDD;
+@media (min-width:767px) {
+	#blogDetails{
+		width: 982px;
+		margin: 0 auto;
+		margin-top: 50px;
+		padding-bottom: 30px;
+		border-radius: 10px;
+		box-shadow: 0px 0px 10px #DDDDDD;
+	}
+	.item-info{
+		width: 100%;
+		padding: 50px 71px 50px 71px;
+	}
+	.photoMiddle{
+		width: 400px;
+		margin: 0px 10px 10px 10px;
+	}
+	.photoMiddle img{
+		width: 100%;
+	}
+	.infomation{
+		width: 100%;
+	}
+	.blog-info{
+		width: 100%;
+	}
+	.blog-header{
+		display: flex;
+	}
+	.blog-header img{
+		width: 80px;
+	}
+	.blog-photo{
+		display: flex;
+		flex-wrap: wrap;
+		width: 100%;
+		padding: 0px 0px 10px 0px;
+	}
+	.blog-header img{
+		width: 80px;
+		height: 80px;
+		border-radius: 40px;
+	}
+	.header-info{
+		margin-left: 20px;
+	}
+	.blog-footer{
+		width: 100%;
+	}
+	.blog-footer a{
+		float: right;
+		margin-left: 100px;
+	}
+	.comments{
+		width: 882px;
+		margin: 0 auto;
+	}
+	h4,h5{
+		color: #8a8c9f;
+	}
+	.comments form{
+		width: 100%;
+		height: 200px;
+	}
+	.textarea-parent{
+		width: 96%;
+		height: 120px;
+		margin: 0 auto;
+		box-shadow: 0px 0px 10px #DDDDDD;
+		padding-top: 1%;
+		border-radius: 10px;
+	}
+	.textarea-parent textarea{
+		width: 96%;
+		height: 90%;
+		display: block;
+		margin: 0 auto;
+		
+		font-size: 18px;
+		color: #333;
+		
+		border: none;
+		outline: none;
+	}
+	.comment-btn{
+		width: 96%;
+		height: 40px;
+		margin: 0 auto;
+		margin-top: 15px;
+	}
+	.comment-btn span{
+		color: #8a8c9f;
+		float: right;
+		margin-right: 10px;
+		line-height: 40px;
+	}
+	.comment-btn button{
+		float: right;
+	}
+	.comments-data{
+		width: 96%;
+		margin: 0 auto;
+	}
+	.comments-data li {
+		width: 100%;
+		margin-top: 20px;
+		padding-bottom: 40px;
+		
+		border-bottom: 2px solid #F1F1F1;
+	}
+	.comments-data li a{
+		float: right;
+		margin-top: 10px;
+		
+		font-family: "黑体";
+		color: #000000;
+	}
+	.comments-data li span{
+		font-size: 18px;
+	}
+	.minor_title{
+		color: #999;
+		font-size: 16px;
+	}
+	.blog-info p{
+		margin-top: 10px;
+		font-size: 18px;
+		/* 文字换行：不间断英文单词 */
+		word-wrap: break-word;
+	}
+	.replyText{
+		margin-top: 50px;
+		width: 100%;
+		display: none;
+	}
+	.replyText textarea{
+		/* 文字换行：不间断英文单词 */
+		word-wrap: break-word;
+		width: 100%;
+		height: 100px;
+		padding: 10px 10px 10px 10px;
+		outline: none;
+	}
+	.replyText button{
+		float: right;
+		margin-left: 10px;
+	}
+	.comment-author{
+		max-width: 10%;
+		display: inline-block;
+		vertical-align: top;
+		text-align: center;
+		/* 文字换行：间断英文单词*/
+		word-break:break-all;
+		color: #0c73c2;
+	}
+	.comment-author:after{
+		content: "：";
+	}
+	.comment-content{
+		display: inline-block;
+		width: 85%;
+	}
+	.repliedContent{
+		width: 98%;
+		margin: 0 auto;
+		color: #999999;
+		margin-bottom: 10px;
+	}
 }
-.item-info{
-	width: 100%;
-	padding: 50px 71px 50px 71px;
-}
-.photoMiddle{
-	width: 400px;
-	margin: 0px 10px 10px 10px;
-}
-.infomation{
-	width: 100%;
-}
-.blog-info{
-	width: 100%;
-}
-.blog-header{
-	display: flex;
-}
-.blog-photo{
-	display: flex;
-	flex-wrap: wrap;
-	width: 100%;
-	padding: 0px 0px 10px 0px;
-}
-.blog-header img{
-	width: 80px;
-	height: 80px;
-	border-radius: 40px;
-}
-.header-info{
-	margin-left: 20px;
-}
-.blog-footer{
-	width: 100%;
-}
-.blog-footer a{
-	float: right;
-	margin-left: 100px;
-}
-.comments{
-	width: 882px;
-	margin: 0 auto;
-}
-h4,h5{
-	color: #8a8c9f;
-}
-.comments form{
-	width: 100%;
-	height: 200px;
-}
-.textarea-parent{
-	width: 96%;
-	height: 120px;
-	margin: 0 auto;
-	box-shadow: 0px 0px 10px #DDDDDD;
-	padding-top: 1%;
-	border-radius: 10px;
-}
-.textarea-parent textarea{
-	width: 96%;
-	height: 90%;
-	display: block;
-	margin: 0 auto;
-	
-	font-size: 18px;
-	color: #333;
-	
-	border: none;
-	outline: none;
-}
-.comment-btn{
-	width: 96%;
-	height: 40px;
-	margin: 0 auto;
-	margin-top: 15px;
-}
-.comment-btn span{
-	color: #8a8c9f;
-	float: right;
-	margin-right: 10px;
-	line-height: 40px;
-}
-.comment-btn button{
-	float: right;
-}
-.comments-data{
-	width: 96%;
-	margin: 0 auto;
-}
-.comments-data li {
-	width: 100%;
-	margin-top: 20px;
-	padding-bottom: 40px;
-	
-	border-bottom: 2px solid #F1F1F1;
-}
-.comments-data li a{
-	float: right;
-	margin-top: 10px;
-	
-	font-family: "黑体";
-	color: #000000;
-}
-.comments-data li span{
-	font-size: 18px;
-}
-.minor_title{
-	color: #999;
-	font-size: 16px;
-}
-.blog-info p{
-	margin-top: 10px;
-	font-size: 18px;
-	/* 文字换行：不间断英文单词 */
-	word-wrap: break-word;
-}
-.replyText{
-	margin-top: 50px;
-	width: 100%;
-	display: none;
-}
-.replyText textarea{
-	/* 文字换行：不间断英文单词 */
-	word-wrap: break-word;
-	width: 100%;
-	height: 100px;
-	padding: 10px 10px 10px 10px;
-	outline: none;
-}
-.replyText button{
-	float: right;
-	margin-left: 10px;
-}
-.comment-author{
-	max-width: 10%;
-	display: inline-block;
-	vertical-align: top;
-	text-align: center;
-	/* 文字换行：间断英文单词*/
-	word-break:break-all;
-	color: #0c73c2;
-}
-.comment-author:after{
-	content: "：";
-}
-.comment-content{
-	display: inline-block;
-	width: 85%;
-}
-.repliedContent{
-	width: 98%;
-	margin: 0 auto;
-	color: #999999;
-	margin-bottom: 10px;
+@media (max-width:767px) {
+	#blogDetails{
+		width: 100%;
+		margin: 0 auto;
+		margin-top: 100px;
+		border-radius: 10px;
+		box-shadow: 0px 0px 10px #DDDDDD;
+	}
+	.item-info{
+		width: 100%;
+		padding: 20px 2px 20px 2px;
+	}
+	.photoMiddle{
+		width: 100%;
+		margin: 0px 10px 10px 10px;
+	}
+	.photoMiddle img{
+		width: 100%;
+	}
+	.infomation{
+		width: 100%;
+	}
+	.blog-info{
+		width: 96%;
+		margin: 0 auto;
+	}
+	.blog-header{
+		width: 98%;
+		margin: 0 auto;
+		display: flex;
+	}
+	.blog-header img{
+		height: 40px;
+		border-radius: 50%;
+	}
+	.blog-photo{
+		display: flex;
+		flex-wrap: wrap;
+		width: 100%;
+		padding: 0px 0px 10px 0px;
+	}
+	.header-info{
+		margin-left: 10px;
+	}
+	.header-info h3{
+		margin-top: 0;
+	}
+	.blog-footer{
+		width: 100%;
+	}
+	.blog-footer a{
+		float: right;
+	}
+	.comments{
+		width: 100%;
+		margin: 0 auto;
+	}
+	h4,h5{
+		color: #8a8c9f;
+	}
+	.comments form{
+		width: 100%;
+	}
+	.textarea-parent{
+		width: 96%;
+		height: 120px;
+		margin: 0 auto;
+		box-shadow: 0px 0px 10px #DDDDDD;
+		padding-top: 1%;
+		border-radius: 10px;
+	}
+	.textarea-parent textarea{
+		width: 96%;
+		height: 90%;
+		display: block;
+		margin: 0 auto;
+		
+		font-size: 18px;
+		color: #333;
+		
+		border: none;
+		outline: none;
+	}
+	.comment-btn{
+		width: 96%;
+		height: 40px;
+		margin: 0 auto;
+		margin-top: 15px;
+	}
+	.comment-btn span{
+		color: #8a8c9f;
+		float: right;
+		margin-right: 10px;
+		line-height: 40px;
+	}
+	.comment-btn button{
+		float: right;
+	}
+	.comments-data{
+		width: 96%;
+		margin: 0 auto;
+	}
+	.comments-data li {
+		width: 100%;
+		margin-top: 20px;
+		padding-bottom: 40px;
+		
+		border-bottom: 2px solid #F1F1F1;
+	}
+	.comments-data li a{
+		float: right;
+		margin-top: 10px;
+		
+		font-family: "黑体";
+		color: #000000;
+	}
+	.comments-data li span{
+		font-size: 14px;
+	}
+	.minor_title{
+		color: #999;
+		font-size: 16px;
+	}
+	.blog-info p{
+		margin-top: 10px;
+		font-size: 18px;
+		/* 文字换行：不间断英文单词 */
+		word-wrap: break-word;
+	}
+	.replyText{
+		margin-top: 50px;
+		width: 100%;
+		display: none;
+	}
+	.replyText textarea{
+		/* 文字换行：不间断英文单词 */
+		word-wrap: break-word;
+		width: 100%;
+		height: 100px;
+		padding: 10px 10px 10px 10px;
+		outline: none;
+	}
+	.replyText button{
+		float: right;
+		margin-left: 10px;
+	}
+	.comment-author{
+		max-width: 10%;
+		display: inline-block;
+		vertical-align: top;
+		text-align: center;
+		/* 文字换行：间断英文单词*/
+		word-break:break-all;
+		color: #0c73c2;
+	}
+	.comment-author:after{
+		content: "：";
+	}
+	.comment-content{
+		display: inline-block;
+		width: 85%;
+	}
+	.repliedContent{
+		width: 98%;
+		margin: 0 auto;
+		color: #999999;
+		margin-bottom: 10px;
+	}
 }

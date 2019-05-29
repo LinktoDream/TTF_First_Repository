@@ -2,16 +2,18 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title>搜索结果</title>
 		<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
-		<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="../css/general.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/header.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/search.css"/>
 		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
 		<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
-		<script src="http://how2j.cn/study/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
 	</head>
 	<body>
 		<div id="app">
@@ -35,14 +37,14 @@
 							<div class="published-item">
 								<div class="item-author">
 									<div class="author-avatar">
-										<img :src="item.avatar" width="80px" />
+										<img :src="item.avatar"/>
 									</div>
 									<span>{{item.author}}</span>
 								</div>
 								<div class="item-info">
 									<div class="item-header">
 										<span class="item-title">{{item.title}}</span>
-										<span class="item-price">报酬:{{item.price}}元</span>
+										<span class="item-price">报酬:￥{{item.price}}元</span>
 									</div>
 									<div class="item-description" v-html="item.description">
 									</div>
@@ -59,7 +61,7 @@
 						<div v-if="users.length > 0" class="info-title">搜索到和“{{value}}”相关的用户：</div>
 						<a v-for="user in users" :href="'userInfo.html?uid='+user.id" title="点击查看用户详情" class="user-block">
 							<div class="published-item text-info">
-								<img :src="user.avatar" width="80px" height="80px"/>
+								<img :src="user.avatar" />
 								<div class="user-info">
 									<span>昵称：{{user.nickname}}</span>
 									<span>账号：{{user.username}}</span>

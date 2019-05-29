@@ -2,15 +2,16 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 	<title>致行——项目大厅</title>
-	<script src="http://how2j.cn/study/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 	<script src="http://how2j.cn/study/vue.min.js"></script>
 	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/general.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/header.css"/>
-	<link rel="stylesheet" type="text/css" href="../css/source/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="../css/ItemLobby.css"/>
 </head>
 <body>
@@ -20,7 +21,7 @@
 		</div>
 		<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
 		<hr >
-		<div class="main">
+		<div class="main animated fadeInLeftBig">
 			<div id="itemList">
 				<span class="main-nav currMain-nav" @click="change_mainNav">正在竞选</span>
 				<span class="main-nav currMain-nav" @click="change_mainNav">已经完成</span>
@@ -35,7 +36,7 @@
 							<div class="published-item">
 								<div class="item-author">
 									<div class="author-avatar">
-										<img :src="item.avatar" width="80px" />
+										<img :src="item.avatar"/>
 									</div>
 									<span>{{item.author}}</span>
 								</div>
@@ -283,4 +284,5 @@
 		})
 	}
 </script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
 </html>
