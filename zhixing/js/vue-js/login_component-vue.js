@@ -137,14 +137,14 @@ Vue.component("login-component",{
 		// 依据显示宽度改变首部导航栏样式
 		this.IsMenuEvent($(document).width())
 		let pathname = window.location.pathname
-		if(pathname == "/zhixing/pages/index.html"){
-			this.currentHeadNav = "首页"
-		}else if(pathname == "/zhixing/pages/ItemLobby.html"){
+		if(pathname.indexOf("ItemLobby.html") != -1){
 			this.currentHeadNav = "项目大厅"
-		}else if(pathname == "/zhixing/pages/community.html"){
+		}else if(pathname.indexOf("community.html") != -1){
 			this.currentHeadNav = "社区"
-		}else if(pathname == "/zhixing/pages/platform.html"){
+		}else if(pathname.indexOf("platform.html") != -1){
 			this.currentHeadNav = "项目发布"
+		}else if(pathname.indexOf("/zhixing/pages/") != -1){
+			this.currentHeadNav = "首页"
 		}
 	},
 	mounted() {
