@@ -79,8 +79,6 @@ Vue.component("login-component",{
 			// 首部导航显示样式
 			IsMenu:false,
 			currentHeadNav:"",
-			// 屏幕宽度
-			screenWidth:$(document).width(),
 			// 是否登陆
 			IsShow_Login:false,
 			IsLogin_Show:true,
@@ -143,21 +141,17 @@ Vue.component("login-component",{
 			this.currentHeadNav = "社区"
 		}else if(pathname.indexOf("platform.html") != -1){
 			this.currentHeadNav = "项目发布"
-		}else if(pathname.indexOf("/zhixing/pages/") != -1){
+		}else if(pathname === "/zhixing/pages/" || pathname === "/zhixing/pages/index.html"){
 			this.currentHeadNav = "首页"
 		}
-	},
-	mounted() {
-		window.onresize = () => {
-			return (() => {
-				this.screenWidth = $(document).width()
-			})()
-		}
-	},
-	watch:{
-		'screenWidth':function(newVal){
-			this.IsMenuEvent(newVal)
-		}
+		
+		$(window).resize(function(){
+			if($(document).width() < 767){
+				_this.IsMenu = true
+			}else{
+				_this.IsMenu = false
+			}
+		})
 	},
 	methods:{
 		// 可视区域小于767px事件
@@ -167,7 +161,6 @@ Vue.component("login-component",{
 			}else{
 				this.IsMenu = false
 			}
-			console.log(this.IsMenu)
 		},
 		// 切换登陆
 		SwitchLogin:function(){

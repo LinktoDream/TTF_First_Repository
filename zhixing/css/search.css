@@ -111,9 +111,11 @@
 		float: right;
 	}
 	.itemList{
+		width: 100%;
 		margin-bottom: 50px;
 	}
 	.info-title{
+		width: 100%;
 		margin-bottom: 20px;
 		font-size: 20px;
 	}

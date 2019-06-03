@@ -21,7 +21,7 @@
 				<login-component></login-component>
 				<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
 			</div>
-			<div class="main">
+			<div class="main animated fadeInLeftBig">
 				<div class="search_header">
 					<div class="searchbar">
 						<input type="text" name="inputvalue" class="inputvalue" spellcheck="true" v-model="inputvalue" @keypress="search(event)"/>
@@ -32,7 +32,9 @@
 					<h2>项目</h2><hr />
 					<img src="../img/loading1.gif" v-show="showItemLoading" class="loadingGIF" />
 					<div class="itemList">
-						<div v-if="items.length > 0" class="info-title">搜索到和“{{value}}”相关的项目：</div>
+						<div v-if="items.length > 0" class="info-title">
+							搜索到和“{{value}}”相关的项目：
+						</div>
 						<a v-for="item in items" :href="'item.html?id='+item.id" title="点击查看项目详情" class="item-block">
 							<div class="published-item">
 								<div class="item-author">
@@ -53,7 +55,8 @@
 								</div>
 							</div>
 						</a>
-						<div v-if="items.length == 0" class="info-title">抱歉，没有找到和“{{value}}”相关的项目！</div>
+					<div v-if="items.length == 0" class="info-title">抱歉，没有找到和“{{value}}”相关的项目！<br />
+						<div class="F404"></div>
 					</div>
 					<h2>用户</h2><hr />
 					<img src="../img/loading1.gif" v-show="showUserLoading" class="loadingGIF" />
@@ -72,7 +75,8 @@
 								</div>
 							</div>
 						</a>
-						<div v-if="users.length == 0" class="info-title">抱歉，没有找到和“{{value}}”相关的用户！</div>
+						<div v-if="users.length == 0" class="info-title">抱歉，没有找到和“{{value}}”相关的用户！<br>
+						<div class="F404"></div></div>
 					</div>
 				</div>
 			</div>

@@ -13,13 +13,36 @@ li{
 	#app{
 		max-width: 1342px;
 		margin: 0 auto;
+		padding-top:1px;
+	}
+	.main{
+		width: 100%;
+		margin-top: 100px;
+	}
+	.F404{
+		width: 60%;
+		padding-bottom: 60%;
+		margin: 0 auto;
+		background: url(../img/404.jpg) no-repeat;
+		background-size: contain;
 	}
 }
 @media (min-width:767px) {
 	#app{
-		max-width: 1342px;
+		width: 1342px;
 		margin: 0 auto;
 		margin-bottom: 100px;
+		padding-top:1px;
+	}
+	.main{
+		margin-top: 50px;
+	}
+	.F404{
+		width: 40%;
+		padding-bottom: 40%;
+		margin: 0 auto;
+		background: url(../img/404.jpg) no-repeat;
+		background-size: contain;
 	}
 }
 .photoMiddle{
