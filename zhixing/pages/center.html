@@ -167,7 +167,7 @@
 				<div id="myOrders">
 					<span class="currOrders myOrdersH3" @click="change_ordersToCreated">我创建的订单</span>
 					<span class="currOrders myOrdersH3" @click="change_ordersToJoined">我接的订单</span><hr />
-					<table class="order-info table table-hover table-striped" v-if="showAsList">
+					<table class="order-info table table-hover table-striped" v-if="!showAsList">
 						<tr>
 							<th>项目名称</th>
 							<th>金额</th>

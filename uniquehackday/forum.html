@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/info.css"/>
+		<link rel="stylesheet" type="text/css" href="assets/css/headComponent.css"/>
+		<link rel="stylesheet" type="text/css" href="assets/css/forum.css"/>
+		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+		<script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
+	</head>
+	<body>
+		<div id="header">
+			<headcomponent></headcomponent>
+		</div>
+		<script src="assets/js/headComponent.js" type="text/javascript" charset="utf-8"></script>
+		<div class="main-content">
+			<div class="edit-part">
+				<div class="edit-preview">
+					<div class="edit-cont">
+						<textarea id="content" name="content" v-model="text_content"></textarea>
+						<label for="pictures" class="uploadPic">
+							<input id="pictures" type="file" name="pictures" accept="image/*" multiple="multiple" class="hidden" @change="files_change">
+							<span class="glyphicon glyphicon-picture" style="font-size: 26px;"></span>
+						</label>
+					</div>
+					<div class="previewImg" :style="previewImg_style">
+						<div class="img-block" v-for="(src,index) in img_src">
+							<div class="img-close" title="移除图片" @click="delPic(index)">
+								<span>X</span>
+							</div>
+							<img :src="src"/>
+						</div>
+					</div>
+				</div>
+				<div class="publish-part">
+					<button class="publish-btn btn-primary" id="submit" type="button" @click="publishBlog">发布</button>
+				</div>
+				<hr />
+			</div>
+			<div id="blogList">
+				<img src="assets/img/images/loading1.gif" class="loadingGIF" v-show="showLoading">
+				<div v-if="blogs.length > 0">
+					<div class="blog-block" v-for="(blog,i) in blogs">
+						<div class="blog-author">
+							<div class="author-avatar">
+								<img :src="blog.avatar"/>
+							</div>
+							<span>{{blog.author}}</span>
+						</div>
+						<div class="blog-content">
+							<p v-html="blog.content"></p>
+							<div v-for="picture in blog.pictures" class="blog-pictures">
+								<img :src="picture.url"/>
+							</div>
+							<div class="blog-info">
+								<span class="time-font">[{{blog.publishTime}}]</span>
+								<a :href="'blog.html?id='+blog.id" class="minor-font">评论({{blog.commentCount}})</a>
+								<a href="javascript:void(0)" @click="doFavour(blog.id,i)" class="minor-font">赞({{blog.favourCount}})</a>
+							</div>
+						</div>
+					</div>
+					<img src="assets/img/images/loading1.gif" class="loadingGIF" v-show="loadMoreLoadingPIC"/>
+					<div class="loadMore">
+						<button class="btn btn-default" style="width: 100%;" @click="loadMore">加载更多</button>
+					</div>
+				</div> 
+				<div v-else style="text-align: center;">
+					<h3 style="font-weight: 200;">暂无动态……</h3>
+				</div>
+				<hr>
+			</div>
+		</div>
+		<script src="assets/js/forum.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

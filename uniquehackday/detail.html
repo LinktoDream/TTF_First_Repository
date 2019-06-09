@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/info.css"/>
+		<link rel="stylesheet" type="text/css" href="assets/css/headComponent.css"/>
+		<link rel="stylesheet" type="text/css" href="assets/css/detail.css"/>
+		
+		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+		<script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
+	</head>
+	<body>
+		<div id="header">
+			<headcomponent></headcomponent>
+		</div>
+		<script src="assets/js/headComponent.js" type="text/javascript" charset="utf-8"></script>
+		<div class="main-content">
+			<div class="content-top">
+				<div class="top-left">
+					<img src="assets/img/backgrounds/1@2x.jpg" >
+				</div>
+				<div class="top-right">
+					<h4>项目标题</h4>
+					<p>发布时间：</p>
+					<p>学校信息：</p>
+					
+					<div class="top-bottom">
+						<span @click="ToAdd">我要支教</span>
+						<span @click="ToDonate">我要捐助</span>
+					</div>
+				</div>
+			</div>
+			<div class="content-bottom">
+				<div class="left-part">
+					<div class="left-nav">
+						<nav class="navbar navbar-default" role="navigation">
+							<div class="container-fluid">
+							<div>
+								<ul class="nav navbar-nav">
+									<li class="active" @click="leftNavChange"><a href="javascript:void(0)">项目详情</a></li>
+									<li><a href="javascript:void(0)" @click="leftNavChange">相关评价</a></li>
+								</ul>
+							</div>
+							</div>
+						</nav>
+					</div>
+					<div class="left-content">
+						<p><strong>支教地点：xx省xx市xxxx</strong></p>
+						<p><strong>招募人数：10人</strong></p>
+						<p><strong>工作内容：</strong></p>
+						<p class="left-description">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+						<p><strong>联系方式：</strong></p>
+						<p><strong>截止时间：</strong></p>
+					</div>
+					<div class="left-content">
+						<ul>
+							<li>
+								<span class="comment-author">用户</span>
+								<div class="comment-content">
+									<span>xxxxxxxxxxxxxxx</span>
+								</div>
+								<hr >
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="right-part">
+					<h4>报名列表</h4>
+					<ul class="list-group">
+						<li class="list-group-item"><img src=""><span>用户名</span><span>电话：17671733714</span></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			new Vue({
+				el:".main-content",
+				data:{
+					
+				},
+				created() {
+						$(".left-content").eq(0).show()					
+				},
+				methods:{
+					leftNavChange:function(){
+						$(".left-nav ul li").toggleClass("active")
+						$(".left-content").toggle()
+					},
+					getDetail:function(){
+						let data = {
+							
+						}
+						let _this = this
+						// axios({
+						// 	method:"get",
+						// 	url:"",
+						// 	params:data,
+						// }).then(res=>{
+						// 	if(res.data.status == 1){
+						// 		
+						// 	}else{
+						// 		alert(res.data.message)
+						// 	}
+						// }).catch(error=>{
+						// 	alert("网络错误！")
+						// 	console.log(error)
+						// })
+					},
+					ToAdd:function(){
+						if(confirm("是否要报名支教")){
+							alert("请等待审核联系")
+							//axios
+						}
+					},
+					ToDonate:function(){
+						if(confirm("是否确定捐款")){
+							alert("请等待相关机构与您联系")
+							//axios
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

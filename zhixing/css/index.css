@@ -444,6 +444,9 @@
 		height: 560px;
 		padding-top: 40px;
 	}
+	.yesterday h1{
+		text-align: center;
+	}
 	.indent{
 		width: 1226px;
 		height: 360px;

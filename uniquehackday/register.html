@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>注册</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="assets/css/form-elements.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="assets/ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+		
+		 <!-- Javascript -->
+		<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+		<script src="https://cdn.bootcss.com/distpicker/2.0.5/distpicker.min.js"></script>
+		<script src="https://cdn.bootcss.com/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+		<script src="https://cdn.bootcss.com/jquery-validate/1.19.0/localization/messages_zh.min.js"></script>
+		<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+		<script src="assets/js/jquery.backstretch.min.js"></script>
+		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+		<script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
+    </head>
+
+    <body>
+
+        <!-- Top content -->
+        <div class="top-content">
+        	
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1><strong>益支教</strong>&nbsp;TO&nbsp;注册</h1>
+                        </div>
+                    </div>
+                    <div class="row register-part">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                        	<div class="form-top">
+                        		<div class="form-top-left">
+                            		<p v-for="(iden,index) in identifies" @click="tav_change(index)">{{iden}}</p>
+                        		</div>
+                        		<div class="form-top-right">
+                        			<i class="fa fa-key"></i>
+                        		</div>
+                            </div>
+                            <div class="form-bottom">
+			                    <form role="form" action="" method="post" class="login-form" id="form">
+			                    	<div class="form-group">
+			                    		<label class="sr-only" for="form-phone">Password</label>
+			                    		<input type="number" name="form-phone" placeholder="手机号" class="form-phone form-control" id="form-phone" v-model="phone">
+			                    	</div>
+			                        <div class="form-group">
+			                        	<label class="sr-only" for="form-password">Password</label>
+			                        	<input type="password" name="form-password" placeholder="请输入密码" class="form-password form-control" id="form-password" v-model="password">
+			                        </div>
+									 <div class="form-group">
+										<label class="sr-only" for="form-rpassword">Password</label>
+										<input type="password" name="form-rpassword" placeholder="确认密码" class="form-password form-control" id="form-rpassword" v-model="rpassword">
+									</div>
+									<!-- 志愿者 -->
+									<div class="register-different">
+										<div class="form-group">
+											<label class="sr-only" for="form-name">name</label>
+											<input type="text" name="form-name" placeholder="真实姓名" class="form-name form-control" id="form-name" v-model="name">
+										</div>
+										<div class="form-group">
+											<label class="sr-only" for="form-idNumber">idNumber</label>
+											<input type="text" name="form-idNumber" placeholder="身份证号" class="form-idNumber form-control" id="form-idNumber" v-model="idNumber">
+										</div>
+										<div class="form-group">
+											<label class="sr-only" for="form-school">school</label>
+											<input type="text" name="form-school" placeholder="学校" class="form-school form-control" id="form-school" v-model="school">
+										</div>
+										<div class="form-group">
+											<label class="sr-only" for="form-educationBg">educationBg</label>
+											<select class="form-control" name="form-educationBg" id="form-educationBg" v-model="educationBg">
+												<option data-text="——学历——">——学历——</option>
+												<option value="博士">博士</option>
+												<option value="硕士">硕士</option>
+												<option value="本科">本科</option>
+												<option value="专科">专科</option>
+												<option value="专科以下">专科以下</option>
+											</select>
+										</div>
+									</div>
+									<!-- 机构 -->
+									<div class="register-different">
+										<div class="form-group">
+											<label class="sr-only" for="form-institutionName">institutionName</label>
+											<input type="text" name="form-institutionName" placeholder="机构名" class="form-institutionName form-control" id="form-institutionName" v-model="name">
+										</div>
+										<div class="form-group">
+											<label class="sr-only" for="form-institutionId">institutionId</label>
+											<input type="text" name="form-institutionId" placeholder="机构备案号" class="form-institutionId form-control" id="form-institutionId" v-model="idNumber">
+										</div>
+										<div class="form-location" data-toggle="distpicker">
+											<div class="form-horizontal col-md-4">
+												<label class="sr-only" for="province">Province</label>
+												<select class="form-control" id="province" v-model="province"></select>
+											</div>
+											<div class="form-horizontal col-md-4">
+												<label class="sr-only" for="city">City</label>
+												<select class="form-control" id="city" v-model="city"></select>
+											</div>
+											<div class="form-horizontal col-md-4">
+												<label class="sr-only" for="district">District</label>
+												<select class="form-control" id="district" v-model="country"></select>
+											</div>
+										</div>
+									</div>
+									<!-- 需求学校 -->
+									<div class="register-different">
+										<div class="form-group">
+											<label class="sr-only" for="form-schoolname">schoolname</label>
+											<input type="text" name="form-schoolname" placeholder="学校名" class="form-schoolname form-control" id="form-schoolname" v-model="name">
+										</div>
+										<div class="form-group">
+											<label class="sr-only" for="form-schoollevel">schoollevel</label>
+											<select class="form-control" name="form-schoollevel" id="form-schoollevel" v-model="schoolLevel">
+												<option>——学校级别——</option>
+												<option value="大学">大学</option>
+												<option value="高中">高中</option>
+												<option value="初中">初中</option>
+												<option value="小学">小学</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label class="sr-only" for="form-schooldescription">schooldescription</label>
+											<textarea name="form-schooldescription" placeholder="学校描述" class="form-schooldescription form-control" id="form-schooldescription" v-model="description"></textarea>
+										</div>
+										<div class="form-location" data-toggle="distpicker">
+											<div class="form-horizontal col-md-4">
+												<label class="sr-only" for="province2">Province</label>
+												<select class="form-control" id="province2" v-model="province"></select>
+											</div>
+											<div class="form-horizontal col-md-4">
+												<label class="sr-only" for="city2">City</label>
+												<select class="form-control" id="city2" v-model="city"></select>
+											</div>
+											<div class="form-horizontal col-md-4">
+												<label class="sr-only" for="district2">District</label>
+												<select class="form-control" id="district2" v-model="country"></select>
+											</div>
+										</div>
+									</div>
+			                        <button type="button" class="btn" @click="register">注册</button>
+									已经有账号了，我要<a href="login.html">登陆</a>
+			                    </form>
+		                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <script src="assets/js/login-register.js"></script>
+        <!--[if lt IE 10]>
+            <script src="assets/js/placeholder.js"></script>
+        <![endif]-->
+
+    </body>
+
+</html>

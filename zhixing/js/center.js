@@ -595,6 +595,7 @@ function getOrderList(){
 		},
 		created() {
 			this.getMyCreated()
+			console.log(this.showAsList)
 		},
 		mounted() {
 			window.onresize = () => {

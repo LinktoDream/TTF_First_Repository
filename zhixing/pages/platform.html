@@ -41,10 +41,8 @@
 						</div>
 						<div class="field">
 							<label>选择分类</label>
-							<select name="cid">
-							    <option value="1">分类1</option>
-							    <option value="2">分类2</option>
-							    <option value="3">分类3</option>
+							<select name="cid" id="typeSelect">
+							    <option :value="type.id" v-for="type in typeArray">{{type.name}}</option>
 							</select>
 						</div>
 						<button class="publish-btn" id="submit" type="button" onclick="publish()">发布</button>
@@ -87,7 +85,7 @@
                 $(this).val(v.substr(0, v.length - 1));
             }
         });
-    })
+    });
     function getLoginUser() {
         $.ajax({
             url:"http://114.116.77.118:8888/user/getLoginUser",
@@ -106,7 +104,7 @@
                 })
             }
         })
-    }
+    };
     function publish() {
         $.ajax({
             url: "http://114.116.77.118:8888/item/add",
@@ -127,6 +125,37 @@
                 alert("发布失败");
             }
         });
-    }
+    };
+	new Vue({
+		el:"#typeSelect",
+		data:{
+			typeArray:[],//分类数组
+		},
+		created() {
+			this.getTypeArray()
+		},
+		methods:{
+			// 获取分类数组
+			getTypeArray:function(){
+				var _this = this
+				axios({
+					method:"get",
+					url:"http://114.116.77.118:8888/item/getCataList",
+					datatype:"json",
+					crossDomain: true,
+					cache: false,
+					withCredentials: true, // 允许携带cookie
+				}).then(function(res){
+					if(res.data.status == 1){
+						_this.typeArray = res.data.data
+					}else{
+						alert(res.data.message)
+					}
+				}).catch(function(error){
+					alert(error)
+				})
+			},
+		}
+	})
 </script>
 </html>

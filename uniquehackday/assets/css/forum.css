@@ -1,0 +1,149 @@
+.main-content{
+	width: 50%;
+	padding-top: 30px;
+	box-shadow: 0px 0px 5px #DDDDDD;
+}
+.edit-part{
+	width: 90%;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+.edit-cont{
+	width: 100%;
+	display: flex;
+	box-shadow: 0px 0px 10px #DDDDDD;
+	background-color: #FFFFFF;
+}
+.edit-cont textarea{
+	width: 90%;
+	height: 100px;
+	border: none;
+	outline: none;
+	padding: 8px 10px 8px 10px;
+}
+.uploadPic{
+	width: 10%;
+	height: 1;
+	opacity: .5;
+	text-align: center;
+	cursor: pointer;
+	border: 1px solid #DDDDDD;
+}
+.uploadPic span{
+	margin-top: 50%;
+}
+.uploadPic:hover{
+	opacity: 1;
+}
+.publish-part{
+	width: 100%;
+	height: 40px;
+	box-shadow: 0px 0px 10px #DDDDDD;
+	background-color: #FFFFFF;
+}
+.publish-btn{
+	width: 80px;
+	height: 30px;
+	float: right;
+	margin-top: 5px;
+	margin-right: 4px;
+	color: #000000;
+	border: 1px solid #999999;
+	background-color: #F9F9F9;
+}
+.publish-btn:hover,.publish-btn:focus{
+	border-color: #F3C327;
+	background-color: #F3C327;
+}
+#blogList{
+	width: 90%;
+	margin: 0 auto;
+}
+.previewImg{
+	width: 100%;
+	display: none;
+	overflow: hidden;
+}
+.img-close{
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	cursor: pointer;
+	color: #FFFFFF;
+	background-color: #000000;
+	opacity: .6;
+	overflow: hidden;
+	position: absolute;
+	right: 0;
+}
+.img-close:hover{
+	opacity: 1;
+}
+.img-close span{
+	font-size: 20px;
+}
+.img-block{
+	width: 120px;
+	margin: 10px 10px 10px 10px;
+	overflow: hidden;
+	position: relative;
+}
+.img-block > img{
+	width: 120px;
+}
+.blog-block{
+	width: 100%;
+	display: flex;
+	margin-bottom: 50px;
+}
+.blog-content{
+	width: 80%;
+	box-shadow: 0px 5px 5px #DDDDDD;
+	border: 1px solid #DDDDDD;
+	border-radius: 10px;
+	padding: 20px 20px 20px 20px;
+}
+.blog-author{
+	width: 80px;
+	margin-right: 20px;
+	padding-top: 5px;
+}
+.blog-author span{
+	display: block;
+	width:100%;
+	/* 文字换行：间断英文单词*/
+	word-break:break-all;
+	text-align: center;
+	font-weight: 600;
+}
+.author-avatar{
+	width: 80px;
+	height: 80px;
+	border-radius: 40px;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+.author-avatar img{
+	width: 80px;
+}
+.blog-pictures{
+	margin-bottom: 10px;
+}
+.blog-pictures img{
+	width: 100%;
+}
+.blog-info{
+	width: 100%;
+	height: 24px;
+}
+.time-font{
+	font-size: 12px;
+	color: #94998a;
+}
+.minor-font{
+	font-size: 12px;
+	color: #7aa621;
+	float: right;
+	margin-right: 15px;
+	line-height: 30px;
+}
