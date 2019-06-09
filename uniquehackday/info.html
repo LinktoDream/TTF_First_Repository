@@ -54,7 +54,7 @@
 			<div style="margin-bottom: 10px;border-bottom: 1px solid #f3c327;width: 130px;">当前位置：支教中心</div>
 			<div class="main-part">
 				<div class="left-part">
-					<a v-for="(item,index) in infos" href="javascript:void(0)" class="list-group-item" @click="clickItem(index)">
+					<a v-for="(item,index) in infos" :href="'detail.html?id='+item.id" class="list-group-item" @click="clickItem(index)">
 						【<span>{{item.province}}{{item.name}}</span>】<span>{{item.title}}</span>(<span>{{item.createTime}}</span>)<span style="float: right;">{{item.ddlRegister}}</span>
 					</a>
 					<ul class="pagination">
