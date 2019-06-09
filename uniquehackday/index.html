@@ -89,22 +89,9 @@
 								</div>
 								<div class="story_news" >
 									<ul class="mui-table-view">
-										<li class="mui-table-view-cell">【xx省】孩子们需要你来传播知识
-											<span class="mui-badge">2019.01.01</span>
+										<li class="mui-table-view-cell" v-for="item in infos">【{{item.province}}】{{item.title}}
+											<span class="mui-badge">{{item.createTime}}</span>
 										</li>
-										<li class="mui-table-view-cell">【xx省】孩子们需要你来传播知识
-											<span class="mui-badge">2019.01.01</span>
-										</li>
-										<li class="mui-table-view-cell">【xx省】孩子们需要你来传播知识
-											<span class="mui-badge">2019.01.01</span>
-										</li>
-										<li class="mui-table-view-cell">【xx省】孩子们需要你来传播知识
-											<span class="mui-badge">2019.01.01</span>
-										</li>
-										<li class="mui-table-view-cell">【xx省】孩子们需要你来传播知识
-											<span class="mui-badge">2019.01.01</span>
-										</li>
-										
 										<li></li>
 									</ul>
 								</div>
@@ -256,11 +243,10 @@
 				infos:[],
 			},
 			created() {
-				
+				this.getInfo(0)
 			},
 			methods:{
-				getInfo:function(){
-					this.changePageStyle(i)
+				getInfo:function(i){
 					let data = {
 						page:i+1,
 						pageSize:5,
@@ -274,8 +260,9 @@
 						url:"http://132.232.57.130:8083/task/tasks",
 						params:data,
 					}).then(res=>{
-						if(res.data.status == 1){
-							alert(res.data.msg)
+						if(res.data.code == 1){
+							console.log(res.data.data)
+							_this.infos = res.data.data
 						}else{
 							alert(res.data.msg)
 						}

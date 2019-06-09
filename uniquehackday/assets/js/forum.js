@@ -202,13 +202,7 @@ function getLoginUser() {
 			withCredentials: true // 这里设置了withCredentials
 		},
 		success:function (result) {
-			new Vue({
-				el: "#userInfo",
-				data: {
-					status: result.status,
-					user: result.data
-				}
-			})
+			
 		}
 	})
 }

@@ -54,8 +54,8 @@
 			<div style="margin-bottom: 10px;border-bottom: 1px solid #f3c327;width: 130px;">当前位置：支教中心</div>
 			<div class="main-part">
 				<div class="left-part">
-					<a v-for="(item,index) in 10" href="javascript:void(0)" class="list-group-item" @click="clickItem(index)">
-						【<span>湖北省xx学校</span>】<span>标题</span>(<span>截止时间</span>)<span style="float: right;">截止时间</span>
+					<a v-for="(item,index) in infos" href="javascript:void(0)" class="list-group-item" @click="clickItem(index)">
+						【<span>{{item.province}}{{item.name}}</span>】<span>{{item.title}}</span>(<span>{{item.createTime}}</span>)<span style="float: right;">{{item.ddlRegister}}</span>
 					</a>
 					<ul class="pagination">
 						<li @click="prevPage"><a href="javascript:void(0)">&laquo;</a></li>
@@ -66,15 +66,15 @@
 				<div class="right-part">
 					<p><strong>筛选条件</strong></p>
 					<label for="form-schoollevel">学校类型</label>
-					<select class="form-control" name="form-schoollevel" id="form-schoollevel" v-model="schoolLevel">
+					<select class="form-control" name="form-schoollevel" id="form-schoollevel" v-model="schoolLevel" @change="clickPage(0)">
 						<option value="初中">初中</option>
 						<option value="小学">小学</option>
 					</select><br />
 					<div data-toggle="distpicker">
 						<label for="province">地区</label>
-						<select class="form-control" id="province" v-model="province"></select>
+						<select class="form-control" id="province" v-model="province" @change="clickPage(0)"></select>
 					</div><br />
-					<input size="16" type="text" id="datepicker" readonly class="form_datetime form-control" placeholder="请选择日期" v-model="dateStart">
+					<input size="16" type="text" id="datepicker" readonly class="form_datetime form-control" placeholder="请选择日期" v-model="dateStart" @change="clickPage(0)">
 				</div>
 			</div>
 		</div>
@@ -87,7 +87,7 @@
 					province:'',
 					dateStart:'',
 					infos:[],
-					pageCount:5,
+					pageCount:2,
 					currentPage:1
 				},
 				mounted() {
@@ -101,14 +101,13 @@
 							
 						}
 						var _this = this
-						// 这里写请求axios
 						// axios({
 						// 	method:"post",
-						// 	url:_this.url+"/user/register",
+						// 	url:"http://132.232.57.130:8083/task/tasks",
 						// 	params:data,
 						// }).then(res=>{
-						// 	if(res.data.status == 1){
-						// 		alert(res.data.msg)
+						// 	if(res.data.code == 1){
+						// 		_this.infos = res.data.data
 						// 	}else{
 						// 		alert(res.data.msg)
 						// 	}
@@ -131,22 +130,31 @@
 							schoolLevel:this.schoolLevel,
 							startTime:this.dateStart
 						}
+						if(this.province == ''){
+							delete data.province
+						}
+						if(this.schoolLevel == '' || this.schoolLevel ==undefined){
+							delete data.schoolLevel
+						}
+						if(this.startTime == '' || this.startTime ==undefined){
+							delete data.startTime
+						}
 						var _this = this
-						// 这里写请求axios
-						// axios({
-						// 	method:"get",
-						// 	url:_this.url+"/task/tasks",
-						// 	params:data,
-						// }).then(res=>{
-						// 	if(res.data.status == 1){
-						// 		alert(res.data.msg)
-						// 	}else{
-						// 		alert(res.data.msg)
-						// 	}
-						// }).catch(error=>{
-						// 	alert("网络错误")
-						// 	console.log(error)
-						// })
+						axios({
+							method:"get",
+							url:"http://132.232.57.130:8083/task/tasks",
+							params:data,
+						}).then(res=>{
+							if(res.data.code == 1){
+								console.log(res.data.data)
+								_this.infos = res.data.data
+							}else{
+								alert(res.data.msg)
+							}
+						}).catch(error=>{
+							alert("网络错误")
+							console.log(error)
+						})
 					},
 					changePageStyle:function(i){
 						this.currentPage = i+1

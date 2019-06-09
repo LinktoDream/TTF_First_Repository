@@ -105,6 +105,30 @@ new Vue({
 			}else if(this.role == 1){
 				this.schoolR()
 			}
+			
+			let formData = new FormData();
+			formData.append("username",this.phone)
+			formData.append("password",this.password)
+			formData.append("nickname",this.name)
+			axios({
+				method: "post",
+				url: "http://114.116.77.118:8888/user/register",
+				dataType: "jsonp",
+				data:formData,
+				crossDomain: true,
+				cache: false,
+				withCredentials: true // 允许携带cookie
+			}).then(function(res){
+				if(res.data.status == 1){
+					
+				}else{
+					alert(res.data.message)
+				}
+			}).catch(function(error){
+				console.log(error)
+				alert("网络异常")
+			})
+			
 		},
 		login:function(){
 			const _this = this
@@ -125,13 +149,34 @@ new Vue({
 					if(res.data.code == 1){
 						window.location.href = "index.html"
 					}else{
-						alert("登陆失败")
+						alert(res.data.message)
 					}
 				}).catch(error=>{
 					alert("网络错误")
 					console.log(error)
 				})
 			}
+			
+			var formData = new FormData();
+			formData.append("username",this.phone)
+			formData.append("password",this.password)
+			axios({
+				method: "post",
+				url: "http://114.116.77.118:8888/user/login",
+				dataType: "jsonp",
+				data:formData,
+				crossDomain: true,
+				cache: false,
+				withCredentials: true // 允许携带cookie
+			}).then(function(res){
+				if(res.data.status == 1){
+					
+				}else{
+					alert("fail")
+				}
+			}).catch(function(error){
+				alert(error)
+			})
 		},
 		volunteer_Reg:function(){
 			const _this = this
@@ -155,6 +200,7 @@ new Vue({
 					if(res.data.code == 1){
 						alert("注册成功！")
 						_this.clearInfo()
+						window.location.href = "login.html"
 					}else{
 						alert(res.data.code)
 					}
@@ -187,6 +233,7 @@ new Vue({
 					if(res.data.code == 1){
 						alert("注册成功！")
 						_this.clearInfo()
+						window.location.href = "login.html"
 					}else{
 						alert("该账号已被注册")
 					}
@@ -218,6 +265,7 @@ new Vue({
 					if(res.data.code == 1){
 						alert("注册成功！")
 						_this.clearInfo()
+						window.location.href = "login.html"
 					}else{
 						alert("该账号已被注册")
 					}
