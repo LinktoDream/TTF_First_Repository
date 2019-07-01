@@ -54,7 +54,7 @@
 						</a>
 						<ul class="pagination">
 							<li class="btn btn-primary" @click="prevPage">&laquo;</li>
-							<li class="btn btn-primary" :class="Page_class[i+1]" v-for="(currP,i) in pageAllNum" @click="getItemList(pageSize,currP)">{{currP}}</li>
+							<li class="btn btn-primary" :class="Page_class[i+1]" v-for="(currP,i) in pageAllNum" @click="getPageItem(pageSize,currP)">{{currP}}</li>
 							<li class="btn btn-primary" @click="nextPage">&raquo;</li>
 						</ul>
 					</div>
@@ -132,6 +132,13 @@
 									this.getTypeItemList(this.pageSize,this.currPage)
 								}
 								this.change_currPageClass(this.currPage)
+							}
+						},
+						getPageItem:function(pSize,currP){
+							if(this.typeText == 'all'){
+								this.getItemList(pSize,currP)
+							}else{
+								this.getTypeItemList(pSize,currP)
 							}
 						},
 						getItemList:function(pSize,currP) {

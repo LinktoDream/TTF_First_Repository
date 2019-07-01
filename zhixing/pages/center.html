@@ -5,8 +5,9 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title>致行——个人中心</title>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
-    <script src="http://how2j.cn/study/vue.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
+	<script src="https://cdn.bootcss.com/vue-router/3.0.6/vue-router.js"></script>
 	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="../css/source/animate.min.css"/>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -29,13 +30,13 @@
 			<ul>
 				<li class="current-nav" onclick="Show_userInfo()">个人资料</li>
 				<li onclick="Show_myBlogs()">我的动态</li>
-				<li onclick="Show_myItems()">我的项目</li>
+				<li onclick="Show_myItems()">我发布的项目</li>
+				<li onclick="Show_myStars()">我收藏的项目</li>
 				<li onclick="Show_myOrders()">我的订单</li>
 			</ul>
 			<span class="glyphicon glyphicon-chevron-right openNav"></span>
 		</div>
 		<div class="main animated fadeInLeftBig">
-			<div class="main-content">
 				<div id="userInfo">
 					<h3>个人资料</h3><hr />
 					<img src="../img/loading1.gif" class="loadingGIF" id="userInfoLoading"/>
@@ -88,13 +89,13 @@
 							<div class="blog-content">
 								<p v-html="blog.content"></p>
 								<div v-for="picture in blog.pictures" class="blog-pictures">
-									<img width="300px" height="150px" v-bind:src="picture.url"/>
+									<img width="300px" height="150px" :src="picture.url"/>
 								</div>
 								<div class="blog-info">
 									<span class="time-font">[{{blog.publishTime}}]</span>
 									<a href="javascript:void(0)" class="minor-font" @click="delBlog(blog.id,i)">删除</a>
 									<!-- <a href="javascript:void(0)" class="minor-font" @click="editBlog(blog.id,i)">编辑</a> -->
-									<a v-bind:href="'blog.html?id='+blog.id" class="minor-font">评论({{blog.commentCount}})</a>
+									<a :href="'blog.html?id='+blog.id" class="minor-font">评论({{blog.commentCount}})</a>
 									<a href="javascript:void(0)" @click="doFavour(blog.id,i)" class="minor-font">赞({{blog.favourCount}})</a>
 								</div>
 							</div>
@@ -134,7 +135,7 @@
 					</div>
 				</div>
 				<div id="myItems">
-					<h3>我的项目</h3><hr />
+					<h3>我发起的项目</h3><hr />
 					<img src="../img/loading1.gif" class="loadingGIF" id="myItemsLoading">
 					<div v-if="items.length > 0">
 						<ul>
@@ -162,6 +163,37 @@
 					</div>
 					<div v-else class="noInfo-font">
 						您还没有发布项目!&nbsp;&nbsp;&nbsp;<a href="platform.html">现在去发布</a>
+					</div>
+				</div>
+				<div id="myStars">
+					<h3>我收藏的项目</h3><hr />
+					<img src="../img/loading1.gif" class="loadingGIF" id="myStarsLoading">
+					<div v-if="items.length > 0">
+						<ul>
+							<li v-for="(item,i) in items" @mouseenter="getCandidates(item.id,i)" @mouseleave="hideCandidates(i)">
+								<div class="item-main">
+									<div class="ToItemInfo" @click="ToItemPage(item.id)">
+										<span class="item-title siggleText" :title="item.title"><span style="color: #28A745;font-weight: 500;" v-show="item.state == 2">[已完成]</span>{{item.title}}</span>
+										<span class="item-price">报酬：{{item.price}}元</span>
+										<span class="item-price">已报名{{item.candCount}}人</span>
+									</div>
+									<span v-show="item.state == 1" class="item-close glyphicon glyphicon-remove" @click="closeItem(item.id,i)" alt="取消收藏" title="取消收藏该项目"></span>
+								</div>
+								<div class="candidate-list">
+									<img src="../img/loading1.gif" class="loadingGIF" v-show="showLoading">
+									<div class="candidate-info" v-for="candidate in item.candidates" @click="candidate_Info(candidate.uid,candidate.iid)">
+										<img class="candidate-avatar" :src="candidate.avatar" />
+										<span class="user-name">{{candidate.user}}</span>
+										<span class="join-time">[{{candidate.createTime}}]</span>
+										<img class="BeSelected" src="../img/11573cd595c3aac.jpg!r650.jpg" v-if="candidate.state == 1" />
+									</div>
+								</div>
+								<span class="glyphicon glyphicon-chevron-down openCandidate" @click="openCandidate(item.id,i)"></span>
+							</li>
+						</ul>
+					</div>
+					<div v-else class="noInfo-font">
+						您还没有收藏项目!&nbsp;&nbsp;&nbsp;<a href="ItemLobby.html">现在去收藏</a>
 					</div>
 				</div>
 				<div id="myOrders">
@@ -197,7 +229,6 @@
 						您还没有订单!
 					</div>
 				</div>
-			</div>
 		</div>
 		<!--图片裁剪框 start-->
 		<div style="display: none" class="tailoring-container" id="tailoring-container">

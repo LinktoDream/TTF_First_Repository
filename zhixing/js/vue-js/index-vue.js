@@ -109,6 +109,7 @@ new Vue({
 				_this.showLoading = false
 				if(res.data.status == 1){
 					_this.items = res.data.data
+					console.log(_this.items)
 				}else{
 					alert(res.data.message)
 				}

@@ -155,6 +155,10 @@ li,a{
 		display: block;
 		margin-bottom: 10px;
 	}
+	#myStars li{
+		display: block;
+		margin-bottom: 10px;
+	}
 	.item-price{
 		float: right;
 		margin-left: 20px;

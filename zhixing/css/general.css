@@ -69,3 +69,7 @@ li{
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2; /*行数*/
 }
+.light-font{
+    color: #999999;
+    font-size: 18px;
+}

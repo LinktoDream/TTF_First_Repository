@@ -532,6 +532,9 @@
 	.next{
 		right: 3%;
 	}
+	.page-btn{
+		display: none;
+	}
 }
 
 a{

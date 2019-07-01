@@ -52,9 +52,8 @@
 							</div>
 							<hr />
 							<div class="item-info">
-								<!-- <img :src="item.avatar" :title="item.author" width="30px" height="30px" style="border-radius: 15px;position: absolute;left: 15px;" alt="用户头像"/> -->
-								<span class="siggleText item-footerFont" :title="item.author">发布者：{{item.author}}</span>
-								<span class="item-footerFont">浏览量：{{item.viewCount}}</span>
+								<span class="siggleText item-footerFont" :title="item.author">发布者：<img :src="item.avatar" :title="item.author" width="30px" height="30px" style="border-radius: 15px;margin-right: 5px;" alt="用户头像"/>{{item.author}}</span>
+								<span class="item-footerFont">浏览量：{{item.viewCount}}&nbsp;收藏数：{{item.starCount}}</span>
 								<span class="item-footerFont">发布时间：{{item.createTime}}</span>
 							</div>
 						</a>
@@ -86,7 +85,7 @@
 						<a href="javascript:void(0)" class="prev change" @click="prev" v-show="prev_next_show"><img src="../img/prev.png" /></a>
 						<a href="javascript:void(0)" class="next change" @click="next" v-show="prev_next_show"><img src="../img/next.png" /></a>
 					</div>
-					<div class="" style="text-align: center;">
+					<div class="page-btn" style="text-align: center;">
 						<ul class="pagination">
 							<li class="btn btn-default" @click="prev">&laquo;</li>
 							<li class="btn btn-default" @click="next">&raquo;</li>

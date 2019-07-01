@@ -105,6 +105,17 @@
 		margin-top: 20px;
 		font-size: 16px;
 	}
+	.main-info{
+		width: 100%;
+		display: flex;
+	}
+	.left-info{
+		width: 50%;
+		margin-right: 20%;
+	}
+	.light-font{
+		font-size: 14px;
+	}
 	.item-detail{
 		width: 100%;
 	}

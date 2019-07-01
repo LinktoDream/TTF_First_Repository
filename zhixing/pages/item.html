@@ -29,11 +29,22 @@
 			<div class="item-info">
 				<div class="infomation">
 					<h3><span v-show="item.state == 2" style="color: #28A745;font-weight: 500;">[已完成]</span>{{item.title}}</h3>
-					<p>发布人：<img :src="item.avatar" width="30px" style="border-radius: 15px;">&nbsp;&nbsp;{{item.author}}</p>
-					<p>发布时间：{{item.createTime}}</p>
-					<p>分类:{{item.catalog}}</p>
-					<p>报酬：{{item.price}}元</p>
+					<div class="main-info">
+						<div class="left-info">
+							<p>发布人：<img :src="item.avatar" width="30px" style="border-radius: 15px;">&nbsp;&nbsp;{{item.author}}</p>
+							<p>发布时间：{{item.createTime}}</p>
+							<p>分类:{{item.catalog}}</p>
+							<p>报酬：{{item.price}}元</p>
+						</div>
+						<div class="right-info">
+							<span class="light-font">浏览量：{{item.viewCount}}</span><br>
+							<span class="light-font">收藏数：{{item.starCount}}</span>
+						</div>
+					</div>
 					<button class="btn btn-outline-dark" v-bind:onclick="'join('+item.id+')'">我要报名</button>
+					<button class="btn btn-outline-dark" style="float: right" @click="collect(item.id)">
+						<span class="glyphicon glyphicon-star"></span>{{collectText}}
+					</button>
 				</div>
 				<div class="item-detail">
 					<h4>详细描述</h4>
@@ -119,45 +130,123 @@
                 new Vue({
                     el: "#itemDetails",
                     data: {
-                        item: result.data
+                        item: result.data,
+						collectText:"收藏"
                     },
 					created() {
 						var reg = new RegExp("\n|\r\n", "g");//g,表示全部替换
 						this.item.description = this.item.description.replace(reg, "<br/>");
 						this.item.description = this.item.description.replace(/\s/g, "&nbsp;");
-						var data = {"iid":this.item.id}
-						var _this = this
-						axios({
-							method:"get",
-							url:"http://114.116.77.118:8888/candidate/list",
-							dataType:"json",
-							params:data,
-							crossDomain: true,
-							cache: false,
-							withCredentials: true, // 允许携带cookie
-						}).then(function(res){
-							if(res.data.status == 1){
-								_this.item.candidates = res.data.data
-								for(var i = 0;i < _this.item.candidates.length;i++){
-									if(_this.item.candidates[i].state == 1){
-										_this.selected_Candidate(i)
-									}
-								}
-							}else{
-								alert(res.data.message)
-							}
-						}).catch(function(error){
-							alert(error)
-						})
+						this.getCandidatesList()
+						this.IsStar()
 					},
 					methods:{
+                    	getCandidatesList:function(){
+							var data = {"iid":this.item.id}
+							var _this = this
+							axios({
+								method:"get",
+								url:"http://114.116.77.118:8888/candidate/list",
+								dataType:"json",
+								params:data,
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								if(res.data.status == 1){
+									_this.item.candidates = res.data.data
+									for(var i = 0;i < _this.item.candidates.length;i++){
+										if(_this.item.candidates[i].state == 1){
+											_this.selected_Candidate(i)
+										}
+									}
+								}else{
+									alert(res.data.message)
+								}
+							}).catch(function(error){
+								alert(error)
+							})
+						},
 						candidate_Info:function(uid,iid){
 							window.location.href="userInfo.html?uid="+uid
 						},
 						selected_Candidate:function(i){
 							$(".list-item li").eq(i).attr("class","selectedCandidate")
+						},
+						// 收藏|取消收藏
+						collect:function (iid) {
+							let _this = this
+							const data = {
+								iid:iid
+							}
+							if(_this.collectText=="收藏"){
+								axios({
+									method:"post",
+									url:"http://114.116.77.118:8888/star/add",
+									dataType:"json",
+									params:data,
+									crossDomain: true,
+									cache: false,
+									withCredentials: true, // 允许携带cookie
+								}).then(function(res){
+									if(res.data.status == 1){
+										_this.collectText = "已收藏"
+										_this.item.starCount++
+									}else{
+										alert(res.data.message)
+									}
+								}).catch(function(error){
+									alert(error)
+								})
+							}else{
+								if(confirm("真的要取消收藏吗？")){
+									axios({
+										method:"post",
+										url:"http://114.116.77.118:8888/star/delete",
+										dataType:"json",
+										params:data,
+										crossDomain: true,
+										cache: false,
+										withCredentials: true, // 允许携带cookie
+									}).then(function(res){
+										if(res.data.status == 1){
+											_this.collectText = "收藏"
+											_this.item.starCount--
+										}else{
+											alert(res.data.message)
+										}
+									}).catch(function(error){
+										alert(error)
+									})
+								}
+							}
+						},
+						IsStar:function () {
+							var data = {"iid":this.item.id}
+							var _this = this
+							axios({
+								method:"get",
+								url:"http://114.116.77.118:8888/star/hasStar",
+								dataType:"json",
+								params:data,
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								if(res.data.status == 1){
+									if (res.data.data){
+										_this.collectText = "已收藏"
+									}else{
+										_this.collectText = "收藏"
+									}
+								}else{
+									alert(res.data.message)
+								}
+							}).catch(function(error){
+								alert(error)
+							})
 						}
-					}
+                    }
                 })
             },
             error:function () {

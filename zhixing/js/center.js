@@ -1,11 +1,11 @@
-var itemVue = null
-var blogVue = null
 $(function () {
 	var nav = getQueryString("nav");
 	if (nav == 2) {
 		Show_myBlogs()
 	}else if(nav == 3){
 		Show_myItems()
+	}else if(nav == 4){
+		Show_myStars()
 	}else{
 		Show_userInfo()
 	}
@@ -13,6 +13,7 @@ $(function () {
 	getItemList()
 	getBlogList()
 	getOrderList()
+	getStarList()
 })
 function getQueryString(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -316,7 +317,7 @@ function getBlogList() {
 						this.blogs = result.data
 					}
 					// content回车符替换
-					var reg = new RegExp("\n|\r\n", "g");//g,表示全部替换
+					var reg = new RegExp("\n\r|\r", "g");//g,表示全部替换
 					for(var j = 0;j < this.blogs.length;j++){
 						this.blogs[j].content = this.blogs[j].content.replace(reg, "<br/>");
 						this.blogs[j].content = this.blogs[j].content.replace(/\s/g,"&nbsp;")
@@ -352,7 +353,7 @@ function getBlogList() {
 						$(".blog-content").eq(i).hide()
 						$(".edit-part").eq(i).show()
 						var reg = new RegExp("<br/>", "g");//g,表示全部替换
-						this.blogs[i].content = this.blogs[i].content.replace(reg,"\r\n")
+						this.blogs[i].content = this.blogs[i].content.replace(reg,"\r")
 						if(this.img_files.length > 0 || this.old_src.length > 0){
 							this.previewImg_style = {display:"flex"}
 						}else{
@@ -363,7 +364,7 @@ function getBlogList() {
 					cancleEdite:function(i) {
 						$(".blog-content").eq(i).show()
 						$(".edit-part").eq(i).hide()
-						var reg = new RegExp("\n|\r\n", "g");//g,表示全部替换
+						var reg = new RegExp("|\r", "g");//g,表示全部替换
 						this.blogs[i].content = this.blogs[i].content.replace(reg,"<br/>")
 						if(this.img_files.length > 0 || this.old_src.length > 0){
 							this.previewImg_style = {display:"flex"}
@@ -576,8 +577,6 @@ function getBlogList() {
 							})
 						}
 					},
-					
-					
 				}
 			})
 		}
@@ -595,7 +594,6 @@ function getOrderList(){
 		},
 		created() {
 			this.getMyCreated()
-			console.log(this.showAsList)
 		},
 		mounted() {
 			window.onresize = () => {
@@ -714,6 +712,144 @@ function getOrderList(){
 		}
 	})
 }
+function getStarList(){
+	$("#myStarsLoading").show()
+	$.ajax({
+		url:"http://114.116.77.118:8888/star/listMyStars",
+		type:"get",
+		datatype:"json",
+		xhrFields: {
+			withCredentials: true // 这里设置了withCredentials
+		},
+		success:function (result) {
+			$("#myStarsLoading").hide()
+			itemVue = new Vue({
+				el: "#myStars",
+				data: {
+					items: [],
+					status: result.status,
+					showLoading:true,
+					IsCandidateShow:false
+				},
+				created() {
+					if(result.status == 1){
+						this.items = result.data
+					}
+				},
+				methods:{
+					// 获取候选人列表
+					getCandidates:function(id,index){
+						if($(document).width() > 767){
+							var data = {"iid":id}
+							var _this = this
+							axios({
+								method:"get",
+								url:"http://114.116.77.118:8888/candidate/list",
+								dataType:"json",
+								params:data,
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								if(res.data.status == 1){
+									_this.items[index].candidates = res.data.data
+									_this.showLoading = false
+									for(var i = 0;i < res.data.data.length;i++){
+										if(_this.items[index].candidates[i].state == 1){
+											// 被选中的候选者处理
+										}
+									}
+								}else{
+									alert(res.data.message)
+								}
+							}).catch(function(error){
+								alert(error)
+							})
+							$(".candidate-list").eq(index).show()
+						}
+					},
+					openCandidate:function(id,index){
+						if(!this.IsCandidateShow){
+							var data = {"iid":id}
+							var _this = this
+							axios({
+								method:"get",
+								url:"http://114.116.77.118:8888/candidate/list",
+								dataType:"json",
+								params:data,
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								if(res.data.status == 1){
+									_this.items[index].candidates = res.data.data
+									_this.showLoading = false
+									_this.IsCandidateShow = true
+									$(".candidate-list").eq(index).show()
+									$(".openCandidate").eq(index).toggleClass("glyphicon-chevron-down")
+									$(".openCandidate").eq(index).toggleClass("glyphicon-chevron-up")
+									for(var i = 0;i < res.data.data.length;i++){
+										if(_this.items[index].candidates[i].state == 1){
+											// 被选中的候选者处理
+										}
+									}
+								}else{
+									alert(res.data.message)
+								}
+							}).catch(function(error){
+								alert(error)
+							})
+						}else{
+							$(".candidate-list").eq(index).hide()
+							this.showLoading = true
+							this.IsCandidateShow = false
+							$(".openCandidate").eq(index).toggleClass("glyphicon-chevron-down")
+							$(".openCandidate").eq(index).toggleClass("glyphicon-chevron-up")
+						}
+					},
+					// 隐藏候选人列表
+					hideCandidates:function(index){
+						if($(document).width() > 767){
+							$(".candidate-list").eq(index).hide()
+							this.showLoading = true
+						}
+					},
+					ToItemPage:function(id){
+						window.location.href = "item.html?id="+id
+					},
+					candidate_Info:function(uid,iid){
+						window.location.href="userInfo.html?uid="+uid+"&iid="+iid
+					},
+					// 取消收藏项目
+					closeItem:function(id,index){
+						if(confirm("确定取消收藏该项目吗？")){
+							var data = {"iid":id}
+							var _this = this
+							axios({
+								method:"post",
+								url:"http://114.116.77.118:8888/star/delete",
+								dataType:"json",
+								params:data,
+								crossDomain: true,
+								cache: false,
+								withCredentials: true, // 允许携带cookie
+							}).then(function(res){
+								if(res.data.status == 1){
+									_this.items.splice(index,1)
+								}else{
+									alert(res.data.message)
+								}
+							}).catch(function(error){
+								alert(error)
+							})
+						}
+					}
+				}
+			})
+		}
+	})
+}
+
 
 $(".openNav").click(function(){
 	if($(".openNav").hasClass("glyphicon-chevron-right")){
@@ -728,7 +864,6 @@ $(".openNav").click(function(){
 	$(".openNav").toggleClass("glyphicon-chevron-right")
 	$(".openNav").toggleClass("glyphicon-chevron-left")
 })
-
 $(".main-content").click(function(){
 	if($(".openNav").hasClass("glyphicon-chevron-left")){
 		$(".main-nav").animate({
@@ -744,7 +879,8 @@ function Show_userInfo(){
 	$("#myBlogs").hide()
 	$("#myItems").hide()
 	$("#myOrders").hide()
-	
+	$("#myStars").hide()
+
 	var current_li = $(".main-nav li").eq(0)
 	current_li.attr("class","current-nav")
 	$(".main-nav li").not(current_li).removeAttr("class")
@@ -754,11 +890,12 @@ function Show_myBlogs(){
 	$("#myBlogs").show()
 	$("#myItems").hide()
 	$("#myOrders").hide()
-	
+	$("#myStars").hide()
+
 	var current_li = $(".main-nav li").eq(1)
 	current_li.attr("class","current-nav")
 	$(".main-nav li").not(current_li).removeAttr("class")
-	
+
 	// getBlogList()
 }
 function Show_myItems(){
@@ -766,11 +903,12 @@ function Show_myItems(){
 	$("#myBlogs").hide()
 	$("#myItems").show()
 	$("#myOrders").hide()
-	
+	$("#myStars").hide()
+
 	var current_li = $(".main-nav li").eq(2)
 	current_li.attr("class","current-nav")
 	$(".main-nav li").not(current_li).removeAttr("class")
-	
+
 	// getItemList()
 }
 function Show_myOrders(){
@@ -778,6 +916,18 @@ function Show_myOrders(){
 	$("#myBlogs").hide()
 	$("#myItems").hide()
 	$("#myOrders").show()
+	$("#myStars").hide()
+
+	var current_li = $(".main-nav li").eq(4)
+	current_li.attr("class","current-nav")
+	$(".main-nav li").not(current_li).removeAttr("class")
+}
+function Show_myStars() {
+	$("#userInfo").hide()
+	$("#myBlogs").hide()
+	$("#myItems").hide()
+	$("#myOrders").hide()
+	$("#myStars").show()
 	
 	var current_li = $(".main-nav li").eq(3)
 	current_li.attr("class","current-nav")
