@@ -12,7 +12,8 @@ a:hover div{
 @media (min-width: 767px) {
 	.main{
 		width: 700px;
-		margin: 0 auto;
+		margin-left: auto;
+		margin-right: auto;
 	}
 	.itemContent{
 		display: none;

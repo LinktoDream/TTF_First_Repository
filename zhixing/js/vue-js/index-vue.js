@@ -18,6 +18,7 @@ new Vue({
 		//滑动栏silder
 		img_url:['../img/slider.jpg','../img/slider2.jpg','../img/slider3.jpg'],
 		slider_index:0,
+		isFocus:false,
 		
 		style_slider:{'animation-name': 'slider_img',animation: 'slider_img 2s alternate','-webkit-animation': 'slider_img 2s alternate' ,'-moz-animation': 'slider_img 2s alternate infinite'},
 		
@@ -221,6 +222,13 @@ new Vue({
 			if(this.inputvalue != ''){
 				window.location.href = "search.html?value="+this.inputvalue
 			}
+		},
+		
+		searchValueFocus(){
+			this.isFocus = true
+		},
+		searchValueBlur(){
+			this.isFocus = false
 		}
 	}
 })

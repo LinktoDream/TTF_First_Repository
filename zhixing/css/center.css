@@ -6,13 +6,12 @@ li,a{
 	.main{
 		width: 790px;
 		display: inline-block;
-		margin-top: 20px;
 	}
 	.main-nav{
 		width: 200px;
 		margin-left: 12%;
-		margin-right: 5px;
-		margin-top: 20px;
+		margin-right: 15px;
+		margin-top: 100px;
 		display: inline-block;
 		vertical-align: top;
 		box-shadow: 0px 0px 10px #DDDDDD;

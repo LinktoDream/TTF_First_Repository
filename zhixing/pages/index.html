@@ -28,8 +28,8 @@
 				<div class="banner">
 					<img class="banner-bg" src="../img/banner.jpg" />
 					<h1>致行——<br>&nbsp;&nbsp;&nbsp;&nbsp;大学生自己的外包平台</h1>
-					<div class="searchbar">
-						<input type="text" class="inputvalue" placeholder="搜索项目/用户" spellcheck="true" v-model="inputvalue" @keypress="search(event)"/>
+					<div class="searchbar" :class="{searchbarHover:isFocus}">
+						<input type="text" class="inputvalue" placeholder="搜索项目/用户" spellcheck="true" v-model="inputvalue" @keypress="search(event)" @focus="searchValueFocus" @blur="searchValueBlur"/>
 						<a href="javascript:void(0)" class="searchbutton" @click="search_btn"><img src="../img/searchbutton.png" /></a>
 					</div>
 				</div>
@@ -53,7 +53,7 @@
 							<hr />
 							<div class="item-info">
 								<span class="siggleText item-footerFont" :title="item.author">发布者：<img :src="item.avatar" :title="item.author" width="30px" height="30px" style="border-radius: 15px;margin-right: 5px;" alt="用户头像"/>{{item.author}}</span>
-								<span class="item-footerFont">浏览量：{{item.viewCount}}&nbsp;收藏数：{{item.starCount}}</span>
+								<span class="item-footerFont">浏览量：{{item.viewCount}}<span style="margin-left: 50px;display: inline-block;">收藏数：{{item.starCount}}</span></span>
 								<span class="item-footerFont">发布时间：{{item.createTime}}</span>
 							</div>
 						</a>

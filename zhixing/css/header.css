@@ -1,5 +1,12 @@
 @media (min-width:767px){
 	/* 首部 */
+	#header{
+		width: 1342px;
+		position: fixed;
+		top: 0;
+		
+		z-index: 10;
+	}
 	.header{
 		width: 100%;
 		min-height: 70px;
