@@ -385,7 +385,6 @@ li,a{
 	}
 	.main-nav{
 		width: 50%;
-		height: 180px;
 		display: flex;
 		box-shadow: 0px 0px 10px #DDDDDD;
 		border-radius: 10px;
