@@ -1,79 +1,79 @@
 Vue.component("login-component",{
-	template:'<div><div class="sl-login-overlay" v-show="IsShow_Login"></div>'+
-				'<div class="login_panel" style="z-index: 10;" v-show="IsShow_Login">'+
-					'<div class="sl-login animated fadeInDown">'+
-						'<span class="sl-login-close" @click="CloseLogin">×</span>'+
-						'<div class="login-nav">'+
-							'<span :id="login_id" @click="SwitchLogin">登陆</span>'+
-							'<span :id="register_id" @click="SwitchRegister">注册</span>'+
-						'</div>'+
-						'<div class="login_input" v-show="IsLogin_Show">'+
-							'<div class="form-group">'+
-								'<label class="sr-only" for="login-InputEmail">手机号</label>'+
-								'<input type="number" class="form-control" id="login-InputEmail" placeholder="请输入手机号" v-model="login_userID" @keypress="login(event)">'+
-							'</div>'+
-							'<div class="form-group">'+
-								'<label class="sr-only" for="id-InputPassword">密码</label>'+
-								'<input type="password" class="form-control" id="login-InputPassword" placeholder="请输入密码" v-model="login_userPW" @keypress="login(event)">'+
-							'</div>'+
-							'<p class="warning-info" v-show="Islogin_fail">{{message}}</p>'+
-							'<button type="submit" class="btn btn-primary login_button" @click="login_btn">登陆</button>'+
-						'</div>'+
-						'<div class="register_input" v-show="IsRegister_Show">'+
-							'<span class="warning-info" v-show="IsIDLegal==\'no\'">{{message}}</span>'+
-							'<div class="form-group">'+
-								'<label class="sr-only" for="register-InputEmail">手机号</label>'+
-								'<input type="number" :class="ID_style" class="form-control" id="register-InputEmail" placeholder="请输入注册手机号" v-model="register_userID" maxlength="16" @blur.prevent="IsRegisterIDLegal($event)" @focus="ID_focus">'+
-							'</div>'+
-							'<span class="warning-info" v-show="IsPWLegal==\'little\'">密码长度不小于8位</span>'+
-							'<div class="form-group">'+
-								'<label class="sr-only" for="register-InputPassword">密码</label>'+
-								'<input type="password" :class="PW_style" class="form-control" id="register-InputPassword" placeholder="请输入8~16位密码" v-model="register_userPW" @blur.prevent="IsRegisterPWLegal2($event)" maxlength="16" @focus="PW_focus">'+
-							'</div>'+
-							'<span class="warning-info" v-show="IsRPWLegal==\'no\'">两次输入密码不一致</span>'+
-							'<div class="form-group">'+
-								'<label class="sr-only" for="register-resetPassword">确认密码</label>'+
-								'<input type="password" :class="resetPW_style" class="form-control" id="register-resetPassword" placeholder="确认密码" v-model="register_resetPW" @blur.prevent="IsRegisterPWLegal($event)" maxlength="16" @focus="resetPW_focus">'+
-							'</div>'+
-							'<div class="form-group">'+
-								'<label class="sr-only" for="register-InputName">昵称</label>'+
-								'<input type="text" :class="Name_style" class="form-control" id="register-InputName" placeholder="请输入6个字符以内昵称" v-model="register_userName" @blur.prevent="IsNameLegal($event)" maxlength="6" @focus="Name_focus">'+
-							'</div>'+
-							'<button type="submit" class="btn btn-primary login_button" @click="register">注册</button>'+
-						'</div>'+
-					'</div>'+
-				'</div>'+
-				'<div class="header" >'+
-					'<div class="logo"><a href="index.html" class="header_a"><img src="../img/LOGO.png" height="70px"/></a></div>'+
-					'<div class="user-img dropdown" v-if="user != null">'+
-						'<a href="javascript:void(0)" class="header_a" data-toggle="dropdown"><img :src="user.avatar" width="60px"></a>'+
-						'<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">'+
-							'<li role="presentation" ><a href="center.html" role="menuitem" tabindex="-1">个人中心</a></li>'+
-							'<li role="presentation" class="divider"></li>'+
-							'<li role="presentation" @click="exitLogin"><a role="menuitem" tabindex="-1">退出</a></li>'+
-						'</ul>'+
-					'</div>'+
-					'<div class="login" v-else>'+
-						'<a href="javascript:void(0)" @click="OpenLogin">登陆 | 注册</a>'+
-					'</div>'+
-					'<div class="dropdown headNavMenu" v-if="IsMenu">'+
-						'<button class="btn-down" data-toggle="dropdown">{{currentHeadNav}}&nbsp;<span class="glyphicon glyphicon-th-list"></span></button>'+
-						'<ul class="dropdown-menu head-menu" role="menu">'+
-							'<li role="presentation" ><a href="index.html">首页</a></li>'+
-							'<li role="presentation" ><a href="ItemLobby.html">项目大厅</a></li>'+
-							'<li role="presentation" ><a href="community.html">社区</a></li>'+
-							'<li role="presentation" ><a href="platform.html">项目发布</a></li>'+
-						'</ul>'+
-					'</div>'+
-					'<div class="header-nav" v-else>'+
-						'<ul>'+
-							'<li><a href="index.html">首页</a></li>'+
-							'<li><a href="ItemLobby.html">项目大厅</a></li>'+
-							'<li><a href="community.html">社区</a></li>'+
-							'<li><a href="platform.html">项目发布</a></li>'+
-						'</ul>'+
-					'</div>'+
-				'</div></div>',
+	template:`<div><div class="sl-login-overlay" v-show="IsShow_Login"></div>
+				<div class="login_panel" style="z-index: 10;" v-show="IsShow_Login">
+					<div class="sl-login animated fadeInDown">
+						<span class="sl-login-close" @click="CloseLogin">×</span>
+						<div class="login-nav">
+							<span :id="login_id" @click="SwitchLogin">登陆</span>
+							<span :id="register_id" @click="SwitchRegister">注册</span>
+						</div>
+						<div class="login_input" v-show="IsLogin_Show">
+							<div class="form-group">
+								<label class="sr-only" for="login-InputEmail">手机号</label>
+								<input type="number" class="form-control" id="login-InputEmail" placeholder="请输入手机号" v-model="login_userID" @keypress="login(event)">
+							</div>
+							<div class="form-group">
+								<label class="sr-only" for="id-InputPassword">密码</label>
+								<input type="password" class="form-control" id="login-InputPassword" placeholder="请输入密码" v-model="login_userPW" @keypress="login(event)">
+							</div>
+							<p class="warning-info" v-show="Islogin_fail">{{message}}</p>
+							<button type="submit" class="btn btn-primary login_button" @click="login_btn">登陆</button>
+						</div>
+						<div class="register_input" v-show="IsRegister_Show">
+							<span class="warning-info" v-show="IsIDLegal=='no'">{{message}}</span>
+							<div class="form-group">
+								<label class="sr-only" for="register-InputEmail">手机号</label>
+								<input type="number" :class="ID_style" class="form-control" id="register-InputEmail" placeholder="请输入注册手机号" v-model="register_userID" maxlength="16" @blur.prevent="IsRegisterIDLegal($event)" @focus="ID_focus">
+							</div>
+							<span class="warning-info" v-show="IsPWLegal=='little'">密码长度不小于8位</span>
+							<div class="form-group">
+								<label class="sr-only" for="register-InputPassword">密码</label>
+								<input type="password" :class="PW_style" class="form-control" id="register-InputPassword" placeholder="请输入8~16位密码" v-model="register_userPW" @blur.prevent="IsRegisterPWLegal2($event)" maxlength="16" @focus="PW_focus">
+							</div>
+							<span class="warning-info" v-show="IsRPWLegal=='no'">两次输入密码不一致</span>
+							<div class="form-group">
+								<label class="sr-only" for="register-resetPassword">确认密码</label>
+								<input type="password" :class="resetPW_style" class="form-control" id="register-resetPassword" placeholder="确认密码" v-model="register_resetPW" @blur.prevent="IsRegisterPWLegal($event)" maxlength="16" @focus="resetPW_focus">
+							</div>
+							<div class="form-group">
+								<label class="sr-only" for="register-InputName">昵称</label>
+								<input type="text" :class="Name_style" class="form-control" id="register-InputName" placeholder="请输入6个字符以内昵称" v-model="register_userName" @blur.prevent="IsNameLegal($event)" maxlength="6" @focus="Name_focus">
+							</div>
+							<button type="submit" class="btn btn-primary login_button" @click="register">注册</button>
+						</div>
+					</div>
+				</div>
+				<div class="header" >
+					<div class="logo"><a href="index.html" class="header_a"><img src="../img/LOGO.png" height="70px"/></a></div>
+					<div class="user-img dropdown" v-if="user != null">
+						<a href="javascript:void(0)" class="header_a" data-toggle="dropdown"><img :src="user.avatar" width="60px"></a>
+						<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation" ><a href="center.html" role="menuitem" tabindex="-1">个人中心</a></li>
+							<li role="presentation" class="divider"></li>
+							<li role="presentation" @click="exitLogin"><a role="menuitem" tabindex="-1">退出</a></li>
+						</ul>
+					</div>
+					<div class="login" v-else>
+						<a href="javascript:void(0)" @click="OpenLogin">登陆 | 注册</a>
+					</div>
+					<div class="dropdown headNavMenu" v-if="IsMenu">
+						<button class="btn-down" data-toggle="dropdown">{{currentHeadNav}}&nbsp;<span class="glyphicon glyphicon-th-list"></span></button>
+						<ul class="dropdown-menu head-menu" role="menu">
+							<li role="presentation" ><a href="index.html">首页</a></li>
+							<li role="presentation" ><a href="ItemLobby.html">项目大厅</a></li>
+							<li role="presentation" ><a href="community.html">社区</a></li>
+							<li role="presentation" ><a href="platform.html">项目发布</a></li>
+						</ul>
+					</div>
+					<div class="header-nav" v-else>
+						<ul>
+							<li><a href="index.html">首页</a></li>
+							<li><a href="ItemLobby.html">项目大厅</a></li>
+							<li><a href="community.html">社区</a></li>
+							<li><a href="platform.html">项目发布</a></li>
+						</ul>
+					</div>
+				</div></div>`,
 	data:function(){
 		return{
 			// 首部导航显示样式

@@ -1,16 +1,16 @@
 @media (min-width:767px){
 	/* 首部 */
 	#header{
-		width: 1342px;
+		width: 90%;
 		position: fixed;
 		top: 0;
-		
+		left:5%;
 		z-index: 10;
 	}
 	.header{
 		width: 100%;
 		min-height: 70px;
-		background-color: #FFFFFF;
+		background-color: transparent;
 	}
 	/* 首部导航 */
 	.header-nav{

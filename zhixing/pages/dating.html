@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 引入样式 -->
+		<link href="https://cdn.bootcss.com/element-ui/2.11.1/theme-chalk/index.css" rel="stylesheet">
+		<!-- 引入组件库 -->
+		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+		<script src="https://cdn.bootcss.com/element-ui/2.11.1/index.js"></script>
+		<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+		<title>项目大厅</title>
+		<link rel="stylesheet" type="text/css" href="../css/header.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/login-component.css"/>
+		<style>
+			body{
+				background-color: #f4f6f9;
+			}
+			a{
+				text-decoration: none;
+			}
+			a:hover{
+				color: #007BFF;
+			}
+			#app{
+				min-width: 1200px;
+			}
+			.contet-bg{
+				height: 150px;
+				cursor: pointer;
+				border-radius: 2px;
+				padding: 20px 20px 20px 20px;
+			}
+			.item-title{
+				font-size: 20px;
+				font-weight: 700;
+				margin-bottom: 54px;
+			}
+			.contet-bg a{
+				font-size: 20px;
+			}
+			.item-title a{
+				font-weight: 700;
+			}
+			.contet-bg:hover{
+				box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+			}
+			.zx-main{
+				width: 1200px;
+				margin: 0 auto;
+			}
+			.word-center{
+				text-align: center;
+			}
+			.white-bg{
+				background-color: #fff;
+			}
+			.type-container{
+				height: 60px;
+				margin-bottom: 20px;
+			}
+			.typeStyle{
+				display: inline-block;
+				cursor: pointer;
+				width: 80%;
+				height: 90%;
+				line-height: 60px;
+			}
+			.typeStyle:after{
+				position: relative;
+				bottom: 3px;
+				display: block;
+				content: "";
+				width: 0;
+				height: 3px;
+				background-color: #007BFF;
+				margin: 0 auto;
+				transition: width .3s ease-in-out; 
+			}
+			.typeStyle-active:after{
+				width: 80%;
+			}
+			.typeStyle:hover:after{
+				width: 80%;
+			}
+			.loading{
+				font-size: 24px;
+			}
+			.item-box{
+				margin-bottom: 20px;
+			}
+			.title-salary{
+				color: #ff5959;
+				float: right;
+			}
+		</style>
+		<script type="text/javascript">
+			Vue.component('alert-box', {
+			  template: `
+				<div class="demo-alert-box">
+				  <strong>Error!</strong>
+				  <slot></slot>
+				</div>
+			  `
+			});
+			Vue.component('first', {
+				template: `
+					<div>are you ok?<slot></slot></div>
+				`
+			})
+		</script>
+	</head>
+	<body>
+		<div id="app">
+			<el-container>
+				<el-header>
+					<div id="header">
+						<login-component></login-component>
+					</div>
+				</el-header>
+				<el-main class="zx-main">
+					<el-row :gutter="20" type="flex" justify="space-between" class="white-bg type-container">
+						<el-col v-for="(type,i) in types"  class="word-center"><span :class="[isActive[i] ? 'typeStyle-active' : '', 'typeStyle' ]" @mouseenter="typeMouseenter(i)">{{type.name}}</span></el-col>
+					</el-row>
+					<el-row v-if="showLoading" :gutter="20" type="flex" justify="space-between" class="loading">
+						<el-col :xs="24" :sm="24" :lg="24">
+							<i class="el-icon-loading"></i>
+						</el-col>
+					</el-row>
+					<el-row :gutter="20" justify="space-between">
+						<el-col :xs="24" :sm="12" :lg="8" v-for="item in items" class="item-box">
+							<div class="contet-bg white-bg"  @click="moveToItem">
+								<el-row :gutter="20" type="flex" justify="space-between" class="item-title">
+									<el-col span="16">
+										<el-link href="index.html" :underline="false">{{item.title}}</el-link>
+									</el-col>
+									<el-col span="8">
+										<span class="title-salary">{{item.money}}</span>
+									</el-col>
+								</el-row>
+								<el-link href="ItemLobby.html" :underline="false">{{item.author}}</el-link>
+							</div>
+						</el-col>
+					</el-row>
+					<el-footer class="word-center">
+						<el-button type="primary" round @click="MoveLobby">查看更多相似岗位</el-button>
+					</el-footer>
+					<component :is="who">
+						Something bad happened.
+					</component>
+					<el-button type="info" @click="changeCom">切换组件</el-button>
+				</el-main>
+				<el-footer class="word-center">
+					致行@2019
+				</el-footer>
+			</el-container>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el:'#app',
+			data () {
+				return{
+					items:[
+						{title:'京东运营',money:'10k-12k',author:'武汉某公司'},
+						{title:'京东运营',money:'10k-12k',author:'武汉某公司'},
+						{title:'京东运营',money:'10k-12k',author:'武汉某公司'},
+						{title:'京东运营',money:'10k-12k',author:'武汉某公司'},
+						{title:'京东运营',money:'10k-12k',author:'武汉某公司'}
+						
+					],
+					types:[
+						{name:'分类一'},
+						{name:'分类二'},
+						{name:'分类三'},
+						{name:'分类四'},
+						{name:'分类五'},
+						{name:'分类六'},
+					],
+					isActive:new Array(5),
+					imgX:0,
+					showLoading:false,
+					who:'alert-box'
+				}
+			},
+			created() {
+				this.isActive.unshift(1);
+				/*
+				 Ajax请求第1页的数据
+				*/
+			},
+			methods:{
+				moveToItem: function () {
+					alert("111");
+				},
+				typeMouseenter: function (i) {
+					for(let j in this.isActive){
+						this.isActive.splice(j,1,0);
+					};
+					this.isActive.splice(i,1,1);
+					/*
+					 Ajax请求第i页的数据
+					*/
+				},
+				MoveLobby: function () {
+					location.href = 'ItemLobby.html'
+				},
+				changeCom: function () {
+					if(this.who !== 'first')
+						this.who = 'first';
+					else
+						this.who = 'alert-box';
+				}
+			}
+		});
+	</script>
+	<script src="../js/TF_utill.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/vue-js/login_component-vue.js" type="text/javascript" charset="utf-8"></script>
+</html>
