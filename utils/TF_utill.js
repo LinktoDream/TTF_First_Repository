@@ -88,8 +88,6 @@ $.fn.countTo = function (options) {
 		}
 	});
 };
-
-
 $.fn.countTo.defaults = {
 	from: 0,               // the number the element should start at
 	to: 0,                 // the number the element should end at
@@ -100,27 +98,40 @@ $.fn.countTo.defaults = {
 	onUpdate: null,        // callback method for every time the element is updated
 	onComplete: null       // callback method for when the element finishes updating
 };
-
 function formatter(value, settings) {
 	return value.toFixed(settings.decimals);
 }
-
-
-
 // 自定义格式化示例
 $('#count-number').data('countToOptions', {
 formatter: function (value, options) {
   return value.toFixed(options.decimals).replace(/\B(?=(?:\d{3})+(?!\d))/g, ',');
 }
 });
-
 // 开始所有的计时器
 $('.timer').each(count);  
-
 function count(options) {
 	var $this = $(this);
 	options = $.extend({}, options || {}, $this.data('countToOptions') || {});
 	$this.countTo(options);
 }
-
 /* 基于jQuery的数字翻滚计数 end */
+
+/* 基于计时器的简单数字翻滚 start */
+/*
+	创建计时对象;
+	object:{
+		inl: null, //计时器
+		startNum: 0, //起始数值
+		finalNum: num // 终止数值
+	}
+	启动计时器：(step为增长步长，time计时器间隔时间)
+	object。inl = setInterval(function(){numRoll(object,step)},time);
+*/
+let numRoll = function (object,step) {
+	if(object.startNum < object.finalNum){
+		object.startNum += step;
+	}else{
+		clearInterval(object.inl);
+	}
+}
+/* 基于计时器的简单数字翻滚 end */
