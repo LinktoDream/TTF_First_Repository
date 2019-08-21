@@ -131,6 +131,7 @@ let numRoll = function (object,step) {
 	if(object.startNum < object.finalNum){
 		object.startNum += step;
 	}else{
+		object.startNum = object.finalNum;
 		clearInterval(object.inl);
 	}
 }
