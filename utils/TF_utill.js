@@ -125,7 +125,7 @@ function count(options) {
 		finalNum: num // 终止数值
 	}
 	启动计时器：(step为增长步长，time计时器间隔时间)
-	object。inl = setInterval(function(){numRoll(object,step)},time);
+	object.inl = setInterval(function(){numRoll(object,step)},time);
 */
 let numRoll = function (object,step) {
 	if(object.startNum < object.finalNum){
